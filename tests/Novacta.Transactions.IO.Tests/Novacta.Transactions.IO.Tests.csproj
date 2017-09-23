@@ -1,0 +1,130 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Data\copy-file-already-exists-on-commit.txt" />
+    <None Remove="Data\copy-file-already-exists-on-prepare-cannot-overwrite.txt" />
+    <None Remove="Data\copy-file-already-exists-on-prepare-file-is-not-lockable.txt" />
+    <None Remove="Data\copy-file-already-exists-on-rollback-no-scope.txt" />
+    <None Remove="Data\copy-file-already-exists-on-rollback.txt" />
+    <None Remove="Data\copy-file-source.txt" />
+    <None Remove="Data\create-file-already-exists-on-commit.txt" />
+    <None Remove="Data\create-file-already-exists-on-prepare-cannot-overwrite.txt" />
+    <None Remove="Data\create-file-already-exists-on-prepare-file-is-not-lockable.txt" />
+    <None Remove="Data\create-file-already-exists-on-rollback-no-scope.txt" />
+    <None Remove="Data\create-file-already-exists-on-rollback.txt" />
+    <None Remove="Data\delete-file-already-exists-dispose.txt" />
+    <None Remove="Data\delete-file-already-exists-in-doubt.txt" />
+    <None Remove="Data\delete-file-already-exists-no-current-transaction.txt" />
+    <None Remove="Data\delete-file-already-exists-on-commit.txt" />
+    <None Remove="Data\delete-file-already-exists-on-prepare-file-is-not-lockable.txt" />
+    <None Remove="Data\delete-file-already-exists-on-rollback-no-scope.txt" />
+    <None Remove="Data\delete-file-already-exists-on-rollback.txt" />
+    <None Remove="Data\edit-file-already-exists-dispose.txt" />
+    <None Remove="Data\edit-file-already-exists-in-doubt.txt" />
+    <None Remove="Data\edit-file-already-exists-no-current-transaction.txt" />
+    <None Remove="Data\edit-file-already-exists-on-commit.txt" />
+    <None Remove="Data\edit-file-already-exists-on-prepare-file-is-not-lockable.txt" />
+    <None Remove="Data\edit-file-already-exists-on-rollback-no-scope.txt" />
+    <None Remove="Data\edit-file-already-exists-on-rollback.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Data\copy-file-already-exists-on-commit.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\copy-file-already-exists-on-prepare-cannot-overwrite.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\copy-file-already-exists-on-prepare-file-is-not-lockable.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\copy-file-already-exists-on-rollback-no-scope.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\copy-file-already-exists-on-rollback.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\copy-file-source.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\create-file-already-exists-on-commit.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\create-file-already-exists-on-prepare-cannot-overwrite.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\create-file-already-exists-on-prepare-file-is-not-lockable.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\create-file-already-exists-on-rollback-no-scope.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\create-file-already-exists-on-rollback.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\delete-file-already-exists-dispose.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\delete-file-already-exists-in-doubt.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\delete-file-already-exists-no-current-transaction.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\delete-file-already-exists-on-commit.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\delete-file-already-exists-on-prepare-file-is-not-lockable.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\delete-file-already-exists-on-rollback-no-scope.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\delete-file-already-exists-on-rollback.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\edit-file-already-exists-dispose.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\edit-file-already-exists-in-doubt.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\edit-file-already-exists-no-current-transaction.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\edit-file-already-exists-on-commit.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\edit-file-already-exists-on-prepare-file-is-not-lockable.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\edit-file-already-exists-on-rollback-no-scope.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\edit-file-already-exists-on-rollback.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeCoverage" Version="1.0.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.1.18" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.1.18" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tools\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Novacta.Transactions.IO\Novacta.Transactions.IO.csproj" />
+  </ItemGroup>
+
+</Project>
