@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpKI>
+  <HelpKINode Title="CanOverwrite property" Url="html/P_Novacta_Transactions_IO_CreateFileManager_CanOverwrite.htm" />
+  <HelpKINode Title="Commit method" Url="html/M_Novacta_Transactions_IO_FileManager_Commit.htm" />
+  <HelpKINode Title="CopyFileManager class">
+    <HelpKINode Title="CopyFileManager Class" Url="html/T_Novacta_Transactions_IO_CopyFileManager.htm" />
+    <HelpKINode Title="about CopyFileManager class" Url="html/T_Novacta_Transactions_IO_CopyFileManager.htm" />
+    <HelpKINode Title="constructor" Url="html/M_Novacta_Transactions_IO_CopyFileManager__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_Novacta_Transactions_IO_CopyFileManager.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_Novacta_Transactions_IO_CopyFileManager.htm" />
+  </HelpKINode>
+  <HelpKINode Title="CopyFileManager.CopyFileManager constructor" Url="html/M_Novacta_Transactions_IO_CopyFileManager__ctor.htm" />
+  <HelpKINode Title="CreateFileManager class">
+    <HelpKINode Title="CreateFileManager Class" Url="html/T_Novacta_Transactions_IO_CreateFileManager.htm" />
+    <HelpKINode Title="about CreateFileManager class" Url="html/T_Novacta_Transactions_IO_CreateFileManager.htm" />
+    <HelpKINode Title="constructor" Url="html/M_Novacta_Transactions_IO_CreateFileManager__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_Novacta_Transactions_IO_CreateFileManager.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_Novacta_Transactions_IO_CreateFileManager.htm" />
+  </HelpKINode>
+  <HelpKINode Title="CreateFileManager.CanOverwrite property" Url="html/P_Novacta_Transactions_IO_CreateFileManager_CanOverwrite.htm" />
+  <HelpKINode Title="CreateFileManager.CreateFileManager constructor" Url="html/M_Novacta_Transactions_IO_CreateFileManager__ctor.htm" />
+  <HelpKINode Title="CreateFileManager.FileAlreadyExists property" Url="html/P_Novacta_Transactions_IO_CreateFileManager_FileAlreadyExists.htm" />
+  <HelpKINode Title="CreateFileManager.OnCommit method" Url="html/M_Novacta_Transactions_IO_CreateFileManager_OnCommit.htm" />
+  <HelpKINode Title="CreateFileManager.OnPrepareFileStream method" Url="html/M_Novacta_Transactions_IO_CreateFileManager_OnPrepareFileStream.htm" />
+  <HelpKINode Title="CreateFileManager.OnRollback method" Url="html/M_Novacta_Transactions_IO_CreateFileManager_OnRollback.htm" />
+  <HelpKINode Title="DeleteFileManager class">
+    <HelpKINode Title="DeleteFileManager Class" Url="html/T_Novacta_Transactions_IO_DeleteFileManager.htm" />
+    <HelpKINode Title="about DeleteFileManager class" Url="html/T_Novacta_Transactions_IO_DeleteFileManager.htm" />
+    <HelpKINode Title="constructor" Url="html/M_Novacta_Transactions_IO_DeleteFileManager__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_Novacta_Transactions_IO_DeleteFileManager.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_Novacta_Transactions_IO_DeleteFileManager.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DeleteFileManager.DeleteFileManager constructor" Url="html/M_Novacta_Transactions_IO_DeleteFileManager__ctor.htm" />
+  <HelpKINode Title="Dispose method" Url="html/Overload_Novacta_Transactions_IO_FileManager_Dispose.htm" />
+  <HelpKINode Title="EditFileManager class">
+    <HelpKINode Title="EditFileManager Class" Url="html/T_Novacta_Transactions_IO_EditFileManager.htm" />
+    <HelpKINode Title="about EditFileManager class" Url="html/T_Novacta_Transactions_IO_EditFileManager.htm" />
+    <HelpKINode Title="constructor" Url="html/M_Novacta_Transactions_IO_EditFileManager__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_Novacta_Transactions_IO_EditFileManager.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_Novacta_Transactions_IO_EditFileManager.htm" />
+  </HelpKINode>
+  <HelpKINode Title="EditFileManager.EditFileManager constructor" Url="html/M_Novacta_Transactions_IO_EditFileManager__ctor.htm" />
+  <HelpKINode Title="EditFileManager.OnPrepareFileStream method" Url="html/M_Novacta_Transactions_IO_EditFileManager_OnPrepareFileStream.htm" />
+  <HelpKINode Title="EditFileManager.OnRollback method" Url="html/M_Novacta_Transactions_IO_EditFileManager_OnRollback.htm" />
+  <HelpKINode Title="EnlistVolatile method" Url="html/M_Novacta_Transactions_IO_FileManager_EnlistVolatile.htm" />
+  <HelpKINode Title="FileAlreadyExists property" Url="html/P_Novacta_Transactions_IO_CreateFileManager_FileAlreadyExists.htm" />
+  <HelpKINode Title="FileManager class">
+    <HelpKINode Title="FileManager Class" Url="html/T_Novacta_Transactions_IO_FileManager.htm" />
+    <HelpKINode Title="about FileManager class" Url="html/T_Novacta_Transactions_IO_FileManager.htm" />
+    <HelpKINode Title="constructor" Url="html/M_Novacta_Transactions_IO_FileManager__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_Novacta_Transactions_IO_FileManager.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_Novacta_Transactions_IO_FileManager.htm" />
+  </HelpKINode>
+  <HelpKINode Title="FileManager.Commit method" Url="html/M_Novacta_Transactions_IO_FileManager_Commit.htm" />
+  <HelpKINode Title="FileManager.Dispose method" Url="html/Overload_Novacta_Transactions_IO_FileManager_Dispose.htm" />
+  <HelpKINode Title="FileManager.EnlistVolatile method" Url="html/M_Novacta_Transactions_IO_FileManager_EnlistVolatile.htm" />
+  <HelpKINode Title="FileManager.FileManager constructor" Url="html/M_Novacta_Transactions_IO_FileManager__ctor.htm" />
+  <HelpKINode Title="FileManager.InDoubt method" Url="html/M_Novacta_Transactions_IO_FileManager_InDoubt.htm" />
+  <HelpKINode Title="FileManager.ManagedFileStream property" Url="html/P_Novacta_Transactions_IO_FileManager_ManagedFileStream.htm" />
+  <HelpKINode Title="FileManager.OnCommit method" Url="html/M_Novacta_Transactions_IO_FileManager_OnCommit.htm" />
+  <HelpKINode Title="FileManager.OnInDoubt method" Url="html/M_Novacta_Transactions_IO_FileManager_OnInDoubt.htm" />
+  <HelpKINode Title="FileManager.OnPrepareFileStream method" Url="html/M_Novacta_Transactions_IO_FileManager_OnPrepareFileStream.htm" />
+  <HelpKINode Title="FileManager.OnRollback method" Url="html/M_Novacta_Transactions_IO_FileManager_OnRollback.htm" />
+  <HelpKINode Title="FileManager.Prepare method" Url="html/M_Novacta_Transactions_IO_FileManager_Prepare.htm" />
+  <HelpKINode Title="FileManager.Rollback method" Url="html/M_Novacta_Transactions_IO_FileManager_Rollback.htm" />
+  <HelpKINode Title="InDoubt method" Url="html/M_Novacta_Transactions_IO_FileManager_InDoubt.htm" />
+  <HelpKINode Title="ManagedFileStream property" Url="html/P_Novacta_Transactions_IO_FileManager_ManagedFileStream.htm" />
+  <HelpKINode Title="Novacta.Transactions.IO namespace" Url="html/N_Novacta_Transactions_IO.htm" />
+  <HelpKINode Title="Novacta.Transactions.IO.CopyFileManager class" Url="html/T_Novacta_Transactions_IO_CopyFileManager.htm" />
+  <HelpKINode Title="Novacta.Transactions.IO.CreateFileManager class" Url="html/T_Novacta_Transactions_IO_CreateFileManager.htm" />
+  <HelpKINode Title="Novacta.Transactions.IO.DeleteFileManager class" Url="html/T_Novacta_Transactions_IO_DeleteFileManager.htm" />
+  <HelpKINode Title="Novacta.Transactions.IO.EditFileManager class" Url="html/T_Novacta_Transactions_IO_EditFileManager.htm" />
+  <HelpKINode Title="Novacta.Transactions.IO.FileManager class" Url="html/T_Novacta_Transactions_IO_FileManager.htm" />
+  <HelpKINode Title="OnCommit method">
+    <HelpKINode Title="CreateFileManager.OnCommit Method " Url="html/M_Novacta_Transactions_IO_CreateFileManager_OnCommit.htm" />
+    <HelpKINode Title="FileManager.OnCommit Method " Url="html/M_Novacta_Transactions_IO_FileManager_OnCommit.htm" />
+  </HelpKINode>
+  <HelpKINode Title="OnInDoubt method" Url="html/M_Novacta_Transactions_IO_FileManager_OnInDoubt.htm" />
+  <HelpKINode Title="OnPrepareFileStream method">
+    <HelpKINode Title="CreateFileManager.OnPrepareFileStream Method " Url="html/M_Novacta_Transactions_IO_CreateFileManager_OnPrepareFileStream.htm" />
+    <HelpKINode Title="EditFileManager.OnPrepareFileStream Method " Url="html/M_Novacta_Transactions_IO_EditFileManager_OnPrepareFileStream.htm" />
+    <HelpKINode Title="FileManager.OnPrepareFileStream Method " Url="html/M_Novacta_Transactions_IO_FileManager_OnPrepareFileStream.htm" />
+  </HelpKINode>
+  <HelpKINode Title="OnRollback method">
+    <HelpKINode Title="CreateFileManager.OnRollback Method " Url="html/M_Novacta_Transactions_IO_CreateFileManager_OnRollback.htm" />
+    <HelpKINode Title="EditFileManager.OnRollback Method " Url="html/M_Novacta_Transactions_IO_EditFileManager_OnRollback.htm" />
+    <HelpKINode Title="FileManager.OnRollback Method " Url="html/M_Novacta_Transactions_IO_FileManager_OnRollback.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Prepare method" Url="html/M_Novacta_Transactions_IO_FileManager_Prepare.htm" />
+  <HelpKINode Title="Rollback method" Url="html/M_Novacta_Transactions_IO_FileManager_Rollback.htm" />
+  <HelpKINode Title="version">
+    <HelpKINode Title="1.0.0.0" Url="html/b0769088-9ef6-43b1-a1ff-12711d5ee038.htm" />
+    <HelpKINode Title="history" Url="html/6e6cb06c-6e2b-4df3-a8a8-ee7a5e450cf8.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Welcome" Url="html/5bc85e8d-5509-432a-b208-89c4c1e8b856.htm" />
+</HelpKI>

@@ -1,0 +1,178 @@
+﻿<html><head><meta http-equiv="X-UA-Compatible" content="IE=edge" /><link rel="shortcut icon" href="../icons/favicon.ico" /><link rel="stylesheet" type="text/css" href="../styles/branding.css" /><link rel="stylesheet" type="text/css" href="../styles/branding-en-US.css" /><script type="text/javascript" src="../scripts/branding.js">
+          </script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Editing files</title><meta name="Language" content="en-us" /><meta name="Microsoft.Help.Id" content="05730aa6-eb50-4f9a-9e56-872fe00c1274" /><meta name="Description" content="A class derived from T:Novacta.Transactions.IO.EditFileManager must implement method M:Novacta.Transactions.IO.FileManager.OnCommit to state how the managed file should be edited." /><meta name="Microsoft.Help.ContentType" content="Concepts" /><meta name="BrandingAware" content="true" /><link type="text/css" rel="stylesheet" href="../styles/highlight.css" /><script type="text/javascript" src="../scripts/highlight.js"> </script><link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" /><script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script><script type="text/javascript" src="../scripts/branding-Website.js"></script><script type="text/javascript" src="../scripts/clipboard.min.js"></script></head><body onload="OnLoad('cs')"><input type="hidden" id="userDataCache" class="userDataStyle" /><div class="pageHeader" id="PageHeader">Novacta.Transactions.IO Documentation<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div><div class="pageBody"><div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5bc85e8d-5509-432a-b208-89c4c1e8b856.htm" title="Novacta.Transactions.IO Documentation" tocid="roottoc">Novacta.Transactions.IO Documentation</a></div><div class="toclevel1" data-toclevel="1"><a data-tochassubtree="false" href="5bc85e8d-5509-432a-b208-89c4c1e8b856.htm" title="Welcome" tocid="5bc85e8d-5509-432a-b208-89c4c1e8b856">Welcome</a></div><div class="toclevel1" data-toclevel="1"><a data-tochassubtree="false" href="61261869-a35e-46c6-8d5b-6fcf1d327060.htm" title="Getting started" tocid="61261869-a35e-46c6-8d5b-6fcf1d327060">Getting started</a></div><div class="toclevel1" data-toclevel="1"><a data-tochassubtree="false" href="7bf7d37e-e7f7-46f0-894d-c606125cbe5e.htm" title="Creating non-empty files" tocid="7bf7d37e-e7f7-46f0-894d-c606125cbe5e">Creating non-empty files</a></div><div class="toclevel1 current" data-toclevel="1"><a data-tochassubtree="false" href="05730aa6-eb50-4f9a-9e56-872fe00c1274.htm" title="Editing files" tocid="05730aa6-eb50-4f9a-9e56-872fe00c1274">Editing files</a></div><div class="toclevel1" data-toclevel="1"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6e6cb06c-6e2b-4df3-a8a8-ee7a5e450cf8.htm" title="Version history" tocid="6e6cb06c-6e2b-4df3-a8a8-ee7a5e450cf8">Version history</a></div><div class="toclevel1" data-toclevel="1"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="N_Novacta_Transactions_IO.htm" title="Novacta.Transactions.IO" tocid="N_Novacta_Transactions_IO">Novacta.Transactions.IO</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent"><table class="titleTable"><tr><td class="logoColumn"><img src="../icons/Help.png" /></td><td class="titleColumn"><h1>Editing files</h1></td></tr></table><span class="introStyle"></span> <div class="introduction"><p>
+        A class derived from <a href="T_Novacta_Transactions_IO_EditFileManager.htm">EditFileManager</a> must implement method
+        <a href="M_Novacta_Transactions_IO_FileManager_OnCommit.htm">OnCommit</a>
+        to state how the managed file should be edited.
+      </p><p>
+        In the following example, a file manager edits a document
+        in XML format in case of a successfully committed transaction.
+      </p><p><div class="codeSnippetContainer"><div class="codeSnippetContainerTabs"><div id="ID0EAAACAAA_tab1" class="codeSnippetContainerTabSingle">C#</div></div><div class="codeSnippetContainerCodeContainer"><div class="codeSnippetToolBar"><div class="codeSnippetToolBarText"><a id="ID0EAAACAAA_copyCode" href="#" class="copyCodeSnippet" onclick="javascript:CopyToClipboard('ID0EAAACAAA');return false;" title="Copy">Copy</a></div></div><div id="ID0EAAACAAA_code_Div1" class="codeSnippetContainerCode" style="display: block"><pre xml:space="preserve"><span class="highlight-keyword">using</span> System;
+<span class="highlight-keyword">using</span> System.IO;
+<span class="highlight-keyword">using</span> System.Linq;
+<span class="highlight-keyword">using</span> System.Text;
+<span class="highlight-keyword">using</span> System.Transactions;
+<span class="highlight-keyword">using</span> System.Xml;
+<span class="highlight-keyword">using</span> System.Xml.Linq;
+
+<span class="highlight-keyword">namespace</span> Novacta.Transactions.IO.CodeExamples
+{
+    <span class="highlight-comment">/// &lt;summary&gt;</span>
+    <span class="highlight-comment">/// Edits a file containing an XML document.</span>
+    <span class="highlight-comment">/// &lt;/summary&gt;</span>
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> <span class="highlight-class-name">EditXmlFileManager</span> : <span class="highlight-class-name">EditFileManager</span>
+    {
+        <span class="highlight-comment">/// &lt;summary&gt;</span>
+        <span class="highlight-comment">/// Initializes a new instance of the </span>
+        <span class="highlight-comment">/// &lt;see cref="EditXmlFileManager"/&gt; class.</span>
+        <span class="highlight-comment">/// &lt;/summary&gt;</span>
+        <span class="highlight-comment">/// &lt;param name="path"&gt;The path of the managed file.&lt;/param&gt;</span>
+        <span class="highlight-keyword">public</span> <span class="highlight-class-name">EditXmlFileManager</span>(
+            <span class="highlight-keyword">string</span> path) : <span class="highlight-keyword">base</span>(path)
+        {
+        }
+
+        <span class="highlight-comment">/// &lt;summary&gt;</span>
+        <span class="highlight-comment">/// Called when the transaction is successfully committed.</span>
+        <span class="highlight-comment">/// &lt;/summary&gt;</span>
+        <span class="highlight-comment">/// &lt;remarks&gt;</span>
+        <span class="highlight-comment">/// &lt;para&gt;</span>
+        <span class="highlight-comment">/// This method looks for an &lt;c&gt;items&lt;/c&gt; node and, </span>
+        <span class="highlight-comment">/// if found, add a child &lt;c&gt;item&lt;/c&gt; node having </span>
+        <span class="highlight-comment">/// &lt;c&gt;0002&lt;/c&gt; as its &lt;c&gt;id&lt;/c&gt; and </span>
+        <span class="highlight-comment">/// &lt;c&gt;A new item&lt;/c&gt; as its &lt;c&gt;description&lt;/c&gt;. </span>
+        <span class="highlight-comment">/// &lt;/para&gt;</span>
+        <span class="highlight-comment">/// &lt;/remarks&gt;</span>
+        <span class="highlight-keyword">protected</span> <span class="highlight-keyword">override</span> <span class="highlight-keyword">void</span> OnCommit()
+        {
+            <span class="highlight-keyword">var</span> document = <span class="highlight-class-name">XDocument</span>.Load(<span class="highlight-keyword">this</span>.ManagedFileStream);
+
+            <span class="highlight-keyword">var</span> items = <span class="highlight-keyword">from</span> node <span class="highlight-keyword">in</span> document.Descendants()
+                        <span class="highlight-keyword">where</span> node.Name == <span class="highlight-literal">"items"</span>
+                        <span class="highlight-keyword">select</span> node;
+
+            <span class="highlight-keyword">var</span> itemsNode = items.FirstOrDefault();
+
+            <span class="highlight-keyword">if</span> (itemsNode != <span class="highlight-keyword">null</span>)
+            {
+                <span class="highlight-class-name">XElement</span> newItem = <span class="highlight-keyword">new</span> <span class="highlight-class-name">XElement</span>(<span class="highlight-literal">"item"</span>,
+                    <span class="highlight-keyword">new</span> <span class="highlight-class-name">XElement</span>(<span class="highlight-literal">"id"</span>, <span class="highlight-literal">"0002"</span>),
+                    <span class="highlight-keyword">new</span> <span class="highlight-class-name">XElement</span>(<span class="highlight-literal">"description"</span>, <span class="highlight-literal">"A new item"</span>));
+                itemsNode.Add(newItem);
+            }
+
+            <span class="highlight-comment">// Truncate the stream to delete the old content.</span>
+            <span class="highlight-keyword">this</span>.ManagedFileStream.SetLength(<span class="highlight-number">0</span>);
+
+            <span class="highlight-keyword">var</span> xmlTextWriter = <span class="highlight-keyword">new</span> <span class="highlight-class-name">XmlTextWriter</span>(<span class="highlight-keyword">this</span>.ManagedFileStream, Encoding.UTF8);
+            xmlTextWriter.<span class="highlight-class-name">Formatting</span> = <span class="highlight-class-name">Formatting</span>.Indented;
+            document.Save(<span class="highlight-keyword">this</span>.ManagedFileStream);
+        }
+    }
+
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> <span class="highlight-class-name">EditFileManagerExample0</span>  
+    {
+        <span class="highlight-keyword">public</span> <span class="highlight-keyword">void</span> Main()
+        {
+            <span class="highlight-comment">// Define the XML document to be edited in case </span>
+            <span class="highlight-comment">// of a successfully committed transaction.</span>
+            <span class="highlight-keyword">var</span> document = <span class="highlight-keyword">new</span> <span class="highlight-class-name">XDocument</span>();
+            <span class="highlight-keyword">string</span> content =
+                <span class="highlight-literal">"&lt;?xml version='1.0' encoding='utf-8'?&gt;"</span> +
+                <span class="highlight-literal">"&lt;items&gt;"</span> +
+                    <span class="highlight-literal">"&lt;item&gt;"</span> +
+                    <span class="highlight-literal">"&lt;id&gt;0001&lt;/id&gt;"</span> +
+                    <span class="highlight-literal">"&lt;description&gt;A mysterious item&lt;/description&gt;"</span> +
+                    <span class="highlight-literal">"&lt;/item&gt;"</span> +
+                <span class="highlight-literal">"&lt;/items&gt;"</span>;
+            document = <span class="highlight-class-name">XDocument</span>.Parse(content);
+
+            <span class="highlight-comment">// Define the path for the file where </span>
+            <span class="highlight-comment">// the document is saved.</span>
+            <span class="highlight-keyword">var</span> managedPath = <span class="highlight-literal">"edit-file-0.xml"</span>;
+
+            <span class="highlight-comment">// Save the document in a file. </span>
+            <span class="highlight-comment">// This will be edited in case of a </span>
+            <span class="highlight-comment">// successfully committed transaction.</span>
+            <span class="highlight-keyword">using</span> (<span class="highlight-class-name">FileStream</span> stream =
+                <span class="highlight-keyword">new</span> <span class="highlight-class-name">FileStream</span>(managedPath, FileMode.Create))
+            {
+                document.Save(stream, SaveOptions.None);
+            }
+
+            <span class="highlight-comment">// Create the manager.</span>
+            <span class="highlight-keyword">var</span> manager = <span class="highlight-keyword">new</span> <span class="highlight-class-name">EditXmlFileManager</span>(managedPath);
+
+            <span class="highlight-keyword">bool</span> transactionSuccessfullyCommitted = <span class="highlight-keyword">true</span>;
+
+            <span class="highlight-keyword">try</span>
+            {
+                <span class="highlight-comment">// Create a TransactionScope to manage </span>
+                <span class="highlight-comment">// your resources, such as files or database</span>
+                <span class="highlight-comment">// connections. In this way, it is guaranteed </span>
+                <span class="highlight-comment">// that the managing actions can commit or roll back </span>
+                <span class="highlight-comment">// as a single unit of work.</span>
+                <span class="highlight-keyword">using</span> (<span class="highlight-class-name">TransactionScope</span> scope = <span class="highlight-keyword">new</span> <span class="highlight-class-name">TransactionScope</span>())
+                {
+                    <span class="highlight-comment">// Enlist the manager.</span>
+                    manager.EnlistVolatile(EnlistmentOptions.None);
+
+                    <span class="highlight-comment">// Add here additional resource managers,</span>
+                    <span class="highlight-comment">// such as database connections, that need</span>
+                    <span class="highlight-comment">// enlisting in the current transaction.</span>
+
+                    <span class="highlight-comment">// The Complete method commits the transaction. </span>
+                    <span class="highlight-comment">// If an exception has been thrown, Complete </span>
+                    <span class="highlight-comment">// is not called and the transaction is rolled back.</span>
+                    scope.Complete();
+                }
+            }
+            <span class="highlight-keyword">catch</span> (<span class="highlight-class-name">Exception</span> e)
+            {
+                <span class="highlight-class-name">Console</span>.WriteLine(<span class="highlight-literal">"Transaction aborted."</span>);
+                <span class="highlight-class-name">Console</span>.WriteLine(<span class="highlight-literal">"Reason:"</span>);
+                <span class="highlight-class-name">Console</span>.WriteLine(e);
+                transactionSuccessfullyCommitted = <span class="highlight-keyword">false</span>;
+            }
+            <span class="highlight-keyword">finally</span>
+            {
+                <span class="highlight-keyword">if</span> (transactionSuccessfullyCommitted)
+                {
+                    <span class="highlight-class-name">Console</span>.WriteLine(<span class="highlight-literal">"Transaction successfully committed."</span>);
+                }
+            }
+            <span class="highlight-keyword">bool</span> fileExists = <span class="highlight-class-name">File</span>.Exists(managedPath);
+            <span class="highlight-class-name">Console</span>.WriteLine(<span class="highlight-literal">"File exists? {0}."</span>, fileExists);
+            <span class="highlight-keyword">if</span> (fileExists)
+            {
+                <span class="highlight-comment">// We want to access the managed file to inspect its </span>
+                <span class="highlight-comment">// edited content, hence we need to dispose </span>
+                <span class="highlight-comment">// its manager.</span>
+                manager.Dispose();
+
+                <span class="highlight-keyword">using</span> (<span class="highlight-class-name">Stream</span> stream = <span class="highlight-class-name">File</span>.OpenRead(managedPath))
+                {
+                    <span class="highlight-class-name">XDocument</span> savedDocument = <span class="highlight-class-name">XDocument</span>.Load(stream);
+
+                    <span class="highlight-class-name">Console</span>.WriteLine(<span class="highlight-literal">"File content:"</span>);
+                    <span class="highlight-class-name">Console</span>.WriteLine(savedDocument);
+                }
+            }
+        }
+    }
+}
+
+<span class="highlight-comment">// Executing method Main() produces the following output:</span>
+<span class="highlight-comment">// </span>
+<span class="highlight-comment">// Transaction successfully committed.</span>
+<span class="highlight-comment">// File exists? True.</span>
+<span class="highlight-comment">// File content:</span>
+<span class="highlight-comment">// &lt;items&gt;</span>
+<span class="highlight-comment">//   &lt;item&gt;</span>
+<span class="highlight-comment">//     &lt;id&gt;0001&lt;/id&gt;</span>
+<span class="highlight-comment">//     &lt;description&gt;A mysterious item&lt;/description&gt;</span>
+<span class="highlight-comment">//   &lt;/item&gt;</span>
+<span class="highlight-comment">//   &lt;item&gt;</span>
+<span class="highlight-comment">//     &lt;id&gt;0002&lt;/id&gt;</span>
+<span class="highlight-comment">//     &lt;description&gt;A new item&lt;/description&gt;</span>
+<span class="highlight-comment">//   &lt;/item&gt;</span>
+<span class="highlight-comment">// &lt;/items&gt;</span></pre></div></div></div><script type="text/javascript">AddLanguageTabSet("ID0EAAACAAA");</script></p></div></div></div><div id="pageFooter" class="pageFooter"><p><a href="https://github.com/novacta/transaction-io" target="_blank">Copyright © 2017, Giovanni Lafratta, All rights reserved</a></p></div></body></html>

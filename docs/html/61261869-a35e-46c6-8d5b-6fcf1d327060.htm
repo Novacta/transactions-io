@@ -1,0 +1,119 @@
+﻿<html><head><meta http-equiv="X-UA-Compatible" content="IE=edge" /><link rel="shortcut icon" href="../icons/favicon.ico" /><link rel="stylesheet" type="text/css" href="../styles/branding.css" /><link rel="stylesheet" type="text/css" href="../styles/branding-en-US.css" /><script type="text/javascript" src="../scripts/branding.js">
+          </script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Getting started</title><meta name="Language" content="en-us" /><meta name="Microsoft.Help.Id" content="61261869-a35e-46c6-8d5b-6fcf1d327060" /><meta name="Description" content="First of all, add to your project the Novacta.Transactions.IO NuGet packagehttps://www.nuget.org/packages?q=Novacta.Transactions.IO." /><meta name="Microsoft.Help.ContentType" content="Concepts" /><meta name="BrandingAware" content="true" /><link type="text/css" rel="stylesheet" href="../styles/highlight.css" /><script type="text/javascript" src="../scripts/highlight.js"> </script><link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" /><script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script><script type="text/javascript" src="../scripts/branding-Website.js"></script><script type="text/javascript" src="../scripts/clipboard.min.js"></script></head><body onload="OnLoad('cs')"><input type="hidden" id="userDataCache" class="userDataStyle" /><div class="pageHeader" id="PageHeader">Novacta.Transactions.IO Documentation<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div><div class="pageBody"><div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5bc85e8d-5509-432a-b208-89c4c1e8b856.htm" title="Novacta.Transactions.IO Documentation" tocid="roottoc">Novacta.Transactions.IO Documentation</a></div><div class="toclevel1" data-toclevel="1"><a data-tochassubtree="false" href="5bc85e8d-5509-432a-b208-89c4c1e8b856.htm" title="Welcome" tocid="5bc85e8d-5509-432a-b208-89c4c1e8b856">Welcome</a></div><div class="toclevel1 current" data-toclevel="1"><a data-tochassubtree="false" href="61261869-a35e-46c6-8d5b-6fcf1d327060.htm" title="Getting started" tocid="61261869-a35e-46c6-8d5b-6fcf1d327060">Getting started</a></div><div class="toclevel1" data-toclevel="1"><a data-tochassubtree="false" href="7bf7d37e-e7f7-46f0-894d-c606125cbe5e.htm" title="Creating non-empty files" tocid="7bf7d37e-e7f7-46f0-894d-c606125cbe5e">Creating non-empty files</a></div><div class="toclevel1" data-toclevel="1"><a data-tochassubtree="false" href="05730aa6-eb50-4f9a-9e56-872fe00c1274.htm" title="Editing files" tocid="05730aa6-eb50-4f9a-9e56-872fe00c1274">Editing files</a></div><div class="toclevel1" data-toclevel="1"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6e6cb06c-6e2b-4df3-a8a8-ee7a5e450cf8.htm" title="Version history" tocid="6e6cb06c-6e2b-4df3-a8a8-ee7a5e450cf8">Version history</a></div><div class="toclevel1" data-toclevel="1"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="N_Novacta_Transactions_IO.htm" title="Novacta.Transactions.IO" tocid="N_Novacta_Transactions_IO">Novacta.Transactions.IO</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent"><table class="titleTable"><tr><td class="logoColumn"><img src="../icons/Help.png" /></td><td class="titleColumn"><h1>Getting started</h1></td></tr></table><span class="introStyle"></span> <div class="introduction"><p>
+        First of all, add to your project 
+        the Novacta.Transactions.IO 
+        <a href="https://www.nuget.org/packages?q=Novacta.Transactions.IO" target="_blank">NuGet package</a>.
+      </p><p>
+        The main type in the library is
+        <a href="T_Novacta_Transactions_IO_FileManager.htm">FileManager</a>.
+        It represents a manager of file resources which can be enlisted in
+        a transaction.
+      </p><p>
+        Since FileManager is an abstract class,
+        you do not instantiate it in your code.
+        Instead, you can use one of its specialized subclasses,
+        such as
+        <a href="T_Novacta_Transactions_IO_CreateFileManager.htm">CreateFileManager</a>,
+        <a href="T_Novacta_Transactions_IO_EditFileManager.htm">EditFileManager</a>,
+        <a href="T_Novacta_Transactions_IO_DeleteFileManager.htm">DeleteFileManager</a>, and
+        <a href="T_Novacta_Transactions_IO_CopyFileManager.htm">CopyFileManager</a>,
+        to create, update, delete, and copy files, respectively.
+      </p><p>
+        The following example shows the standard use case scenario.
+      </p><p><div class="codeSnippetContainer"><div class="codeSnippetContainerTabs"><div id="ID0EAABCAAA_tab1" class="codeSnippetContainerTabSingle">C#</div></div><div class="codeSnippetContainerCodeContainer"><div class="codeSnippetToolBar"><div class="codeSnippetToolBarText"><a id="ID0EAABCAAA_copyCode" href="#" class="copyCodeSnippet" onclick="javascript:CopyToClipboard('ID0EAABCAAA');return false;" title="Copy">Copy</a></div></div><div id="ID0EAABCAAA_code_Div1" class="codeSnippetContainerCode" style="display: block"><pre xml:space="preserve"><span class="highlight-keyword">using</span> System;
+<span class="highlight-keyword">using</span> System.Transactions;
+
+<span class="highlight-keyword">namespace</span> Novacta.Transactions.IO.CodeExamples
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> <span class="highlight-class-name">UseCaseExample0</span>  
+    {
+        <span class="highlight-keyword">public</span> <span class="highlight-keyword">void</span> Main()
+        {
+            <span class="highlight-keyword">var</span> transactionSuccessfullyCommitted = <span class="highlight-keyword">true</span>;
+
+            <span class="highlight-keyword">try</span>
+            {
+                <span class="highlight-comment">// Create a TransactionScope to manage </span>
+                <span class="highlight-comment">// your resources, such as files or database</span>
+                <span class="highlight-comment">// connections. In this way, it is guaranteed </span>
+                <span class="highlight-comment">// that the managing actions can commit or roll back </span>
+                <span class="highlight-comment">// as a single unit of work.</span>
+                <span class="highlight-keyword">using</span> (<span class="highlight-class-name">TransactionScope</span> scope = <span class="highlight-keyword">new</span> <span class="highlight-class-name">TransactionScope</span>())
+                {
+                    <span class="highlight-comment">// Add the file managers you need and let </span>
+                    <span class="highlight-comment">// them explicitly enlist the current transaction.</span>
+
+                    <span class="highlight-comment">// To copy a source file to a destination file</span>
+                    <span class="highlight-comment">// in case of a successfully committed transaction.</span>
+                    <span class="highlight-keyword">var</span> copyManager =
+                        <span class="highlight-keyword">new</span> <span class="highlight-class-name">CopyFileManager</span>(
+                            sourcePath: <span class="highlight-literal">"file-to-copy.txt"</span>,
+                            managedPath: <span class="highlight-literal">"destination-file.txt"</span>,
+                            overwrite: <span class="highlight-keyword">true</span>);
+                    copyManager.EnlistVolatile(EnlistmentOptions.None);
+
+                    <span class="highlight-comment">// To delete a file </span>
+                    <span class="highlight-comment">// in case of a successfully committed transaction.</span>
+                    <span class="highlight-keyword">var</span> deleteManager =
+                        <span class="highlight-keyword">new</span> <span class="highlight-class-name">DeleteFileManager</span>(
+                            managedPath: <span class="highlight-literal">"file-to-delete.txt"</span>);
+                    deleteManager.EnlistVolatile(EnlistmentOptions.None);
+
+                    <span class="highlight-comment">// To create a file </span>
+                    <span class="highlight-comment">// in case of a successfully committed transaction</span>
+                    <span class="highlight-comment">// (this will create an empty file: if a file having </span>
+                    <span class="highlight-comment">// specific contents is needed, define a new </span>
+                    <span class="highlight-comment">// class derived from CreateFileManager and </span>
+                    <span class="highlight-comment">// override method OnCommit).</span>
+                    <span class="highlight-keyword">var</span> createManager =
+                        <span class="highlight-keyword">new</span> <span class="highlight-class-name">CreateFileManager</span>(
+                            managedPath: <span class="highlight-literal">"file-to-create.txt"</span>,
+                            overwrite: <span class="highlight-keyword">true</span>);
+                    createManager.EnlistVolatile(EnlistmentOptions.None);
+
+                    <span class="highlight-comment">// To edit a file </span>
+                    <span class="highlight-comment">// in case of a successfully committed transaction</span>
+                    <span class="highlight-comment">// (here MyEditFileManager derives from EditFileManager</span>
+                    <span class="highlight-comment">// and has overridden method OnCommit to state</span>
+                    <span class="highlight-comment">// how the managed file must be edited).</span>
+                    <span class="highlight-keyword">var</span> editManager =
+                        <span class="highlight-keyword">new</span> <span class="highlight-class-name">MyEditFileManager</span>(
+                            managedPath: <span class="highlight-literal">"file-to-edit.txt"</span>);
+                    editManager.EnlistVolatile(EnlistmentOptions.None);
+
+                    <span class="highlight-comment">// Add here additional resource managers,</span>
+                    <span class="highlight-comment">// such as database connections, that need</span>
+                    <span class="highlight-comment">// enlisting in the current transaction.</span>
+
+                    <span class="highlight-comment">// The Complete method commits the transaction. </span>
+                    <span class="highlight-comment">// If an exception has been thrown, Complete </span>
+                    <span class="highlight-comment">// is not called and the transaction is rolled back.</span>
+                    scope.Complete();
+                }
+            }
+            <span class="highlight-keyword">catch</span> (<span class="highlight-class-name">Exception</span> e)
+            {
+                <span class="highlight-class-name">Console</span>.WriteLine(<span class="highlight-literal">"Transaction rolled back."</span>);
+                <span class="highlight-class-name">Console</span>.WriteLine(<span class="highlight-literal">"Reason:"</span>);
+                <span class="highlight-class-name">Console</span>.WriteLine(e);
+                transactionSuccessfullyCommitted = <span class="highlight-keyword">false</span>;
+            }
+            <span class="highlight-keyword">finally</span>
+            {
+                <span class="highlight-keyword">if</span> (transactionSuccessfullyCommitted)
+                {
+                    <span class="highlight-class-name">Console</span>.WriteLine(
+                        <span class="highlight-literal">"Transaction successfully committed."</span>);
+                }
+            }
+        }
+    }
+}
+
+<span class="highlight-comment">// Executing method Main() produces the following output:</span>
+<span class="highlight-comment">// </span>
+<span class="highlight-comment">// Transaction successfully committed.</span></pre></div></div></div><script type="text/javascript">AddLanguageTabSet("ID0EAABCAAA");</script></p><p>
+        You can also address specific advanced scenarios by defining your own
+        file manager. For details on how to proceed,
+        see the following <a href="T_Novacta_Transactions_IO_FileManager.htm">documentation</a>).
+      </p></div></div></div><div id="pageFooter" class="pageFooter"><p><a href="https://github.com/novacta/transaction-io" target="_blank">Copyright © 2017, Giovanni Lafratta, All rights reserved</a></p></div></body></html>
