@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -174,11 +177,11 @@ namespace Novacta.Transactions.IO.Tests.Tools
                 var sourcePath = @"Data\copy-file-source.txt";
                 var managedPath = @"Data\copy-file-already-exists-on-commit.txt";
 
-                var copyManager = new CopyFileManager(sourcePath,
+                var manager = new CopyFileManager(sourcePath,
                     managedPath, overwrite: true);
 
                 List<FileManager> managers = new List<FileManager>();
-                managers.Add(copyManager);
+                managers.Add(manager);
 
                 Action results = () =>
                 {
@@ -274,7 +277,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
                 var manager = new CopyFileManager(sourcePath,
                                 managedPath, overwrite: overwrite);
 
-                var stream = manager.OnPrepareFileStream(managedPath);
+                FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                    manager,
+                    "OnPrepareFileStream",
+                    new string[] { managedPath });
 
                 FileManagerReflection.SetStream(manager, stream);
                 stream = null;
@@ -284,7 +290,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
                 // Simulate a rollback
 
-                manager.OnRollback();
+                FileManagerReflection.Invoke(
+                    manager,
+                    "OnRollback",
+                    null);
 
                 // Expected results
 
@@ -308,34 +317,20 @@ namespace Novacta.Transactions.IO.Tests.Tools
             var sourcePath = @"Data\copy-file-source.txt";
             var managedPath = @"Data\copy-file-is-new-no-current-transaction.txt";
 
-            var copyManager = new CopyFileManager(sourcePath,
+            var manager = new CopyFileManager(sourcePath,
                 managedPath, overwrite: true);
 
-            FileStream fileStream = copyManager.OnPrepareFileStream(managedPath);
+            FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                manager,
+                "OnPrepareFileStream",
+                new string[] { managedPath });
 
             ExceptionAssert.IsThrown(
-                () => { copyManager.EnlistVolatile(EnlistmentOptions.None); },
+                () => { manager.EnlistVolatile(EnlistmentOptions.None); },
                 expectedType: typeof(InvalidOperationException),
                 expectedMessage: String.Format(
                         "Cannot enlist resource {0}: no ambient transaction detected.",
                         managedPath));
-        }
-
-        internal static void InDoubt()
-        {
-#if DEBUG
-            Console.WriteLine("InDoubt");
-#endif
-            var sourcePath = @"Data\copy-file-source.txt";
-            var managedPath = @"Data\copy-file-is-new-in-doubt.txt";
-
-            var copyManager = new CopyFileManager(sourcePath,
-                managedPath, overwrite: true);
-
-            ExceptionAssert.IsThrown(
-                () => { copyManager.InDoubt(null); },
-                expectedType: typeof(NotImplementedException),
-                expectedMessage: "The method or operation is not implemented.");
         }
 
         public static void Dispose(bool overwrite)
@@ -344,29 +339,53 @@ namespace Novacta.Transactions.IO.Tests.Tools
             Console.WriteLine("Dispose");
 #endif
             var sourcePath = @"Data\copy-file-source.txt";
-            var managedPath = @"Data\copy-file-is-new-dispose.txt";
+            string managedPath =
+                overwrite
+                ?
+                  @"Data\copy-file-is-new-dispose.txt"
+                : @"Data\copy-file-is-new-dispose-cannot-overwrite.txt";
+
+            // Assure that the managed file is new 
+            // in case of overwrite: false
+            if (!overwrite)
+            {
+                File.Delete(managedPath);
+            }
 
             // Simulate a preparation
 
             var manager = new CopyFileManager(sourcePath,
                             managedPath, overwrite: overwrite);
 
-            Assert.AreEqual(false, FileManagerReflection.GetField(manager, "disposedValue"));
+            Assert.AreEqual(false, FileManagerReflection.GetField(manager, "disposed"));
 
-            var stream = manager.OnPrepareFileStream(managedPath);
+            FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                manager,
+                "OnPrepareFileStream",
+                new string[] { managedPath });
 
             FileManagerReflection.SetStream(manager, stream);
             stream = null;
 
+            // Dispose the manager
+
             manager.Dispose();
-
-            // Simulate rollback results
-
-            File.Delete(managedPath);
 
             // Expected results
 
-            Assert.AreEqual(true, FileManagerReflection.GetField(manager, "disposedValue"));
+            Assert.AreEqual(true, FileManagerReflection.GetField(manager, "disposed"));
+
+            // Dispose the manager, again
+
+            ExceptionAssert.IsNotThrown(
+                () => { manager.Dispose(); }
+                );
+
+            // Delete the managed file in case of overwrite: false
+            if (!overwrite)
+            {
+                File.Delete(managedPath);
+            }
         }
 
         /// <summary>
@@ -385,11 +404,11 @@ namespace Novacta.Transactions.IO.Tests.Tools
                 var sourcePath = @"Data\copy-file-source.txt";
                 var managedPath = @"Data\copy-file-is-new-on-commit.txt";
 
-                var copyManager = new CopyFileManager(sourcePath,
+                var manager = new CopyFileManager(sourcePath,
                     managedPath, overwrite: overwrite);
 
                 List<FileManager> managers = new List<FileManager>();
-                managers.Add(copyManager);
+                managers.Add(manager);
 
                 Action results = () =>
                 {
@@ -476,7 +495,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
                 var manager = new CopyFileManager(sourcePath,
                                 managedPath, overwrite: overwrite);
 
-                var stream = manager.OnPrepareFileStream(managedPath);
+                FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                    manager,
+                    "OnPrepareFileStream",
+                    new string[] { managedPath });
 
                 FileManagerReflection.SetStream(manager, stream);
                 stream = null;
@@ -486,9 +508,18 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
                 // Simulate a rollback
 
-                manager.OnRollback();
+                FileManagerReflection.Invoke(
+                    manager,
+                    "OnRollback",
+                    null);
 
                 // Expected results
+
+                // Dispose the manager, so that
+                // the following call to File.Exists
+                // has the required permissions 
+                // to investigate the managed file.
+                manager.Dispose();
 
                 Assert.IsTrue(!File.Exists(managedPath));
             }

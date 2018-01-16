@@ -1,7 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Transactions;
 
 namespace Novacta.Transactions.IO.Tests.Tools
@@ -113,6 +117,12 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
                 Action results = () =>
                 {
+                    // Dispose the manager, so that
+                    // the following call to File.Exists
+                    // has the required permissions 
+                    // to investigate the managed file.
+                    deleteManager.Dispose();
+
                     Assert.IsTrue(!File.Exists(managedPath));
                 };
 
@@ -193,13 +203,19 @@ namespace Novacta.Transactions.IO.Tests.Tools
                 var manager = new DeleteFileManager(
                                 managedPath);
 
-                var stream = manager.OnPrepareFileStream(managedPath);
+                FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                    manager,
+                    "OnPrepareFileStream",
+                    new string[] { managedPath });
 
                 FileManagerReflection.SetStream(manager, stream);
                 stream = null;
 
-                // Simulate a rollback
+                // Simulate a rollback (NOP)
 
+                // We want to access the managed file to inspect its 
+                // edited contents, hence we need to dispose 
+                // its manager.
                 manager.Dispose();
 
                 // Expected results
@@ -223,33 +239,20 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #endif
             var managedPath = @"Data\delete-file-already-exists-no-current-transaction.txt";
 
-            var deleteManager = new DeleteFileManager(
+            var manager = new DeleteFileManager(
                 managedPath);
 
-            FileStream fileStream = deleteManager.OnPrepareFileStream(managedPath);
+            FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                manager,
+                "OnPrepareFileStream",
+                new string[] { managedPath });
 
             ExceptionAssert.IsThrown(
-                () => { deleteManager.EnlistVolatile(EnlistmentOptions.None); },
+                () => { manager.EnlistVolatile(EnlistmentOptions.None); },
                 expectedType: typeof(InvalidOperationException),
                 expectedMessage: String.Format(
                         "Cannot enlist resource {0}: no ambient transaction detected.",
                         managedPath));
-        }
-
-        internal static void InDoubt()
-        {
-#if DEBUG
-            Console.WriteLine("InDoubt");
-#endif
-            var managedPath = @"Data\delete-file-already-exists-in-doubt.txt";
-
-            var deleteManager = new DeleteFileManager(
-                managedPath);
-
-            ExceptionAssert.IsThrown(
-                () => { deleteManager.InDoubt(null); },
-                expectedType: typeof(NotImplementedException),
-                expectedMessage: "The method or operation is not implemented.");
         }
 
         public static void Dispose()
@@ -264,18 +267,29 @@ namespace Novacta.Transactions.IO.Tests.Tools
             var manager = new DeleteFileManager(
                             managedPath);
 
-            Assert.AreEqual(false, FileManagerReflection.GetField(manager, "disposedValue"));
+            Assert.AreEqual(false, FileManagerReflection.GetField(manager, "disposed"));
 
-            var stream = manager.OnPrepareFileStream(managedPath);
+            FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                manager,
+                "OnPrepareFileStream",
+                new string[] { managedPath });
 
             FileManagerReflection.SetStream(manager, stream);
             stream = null;
+
+            // Dispose the manager
 
             manager.Dispose();
 
             // Expected results
 
-            Assert.AreEqual(true, FileManagerReflection.GetField(manager, "disposedValue"));
+            Assert.AreEqual(true, FileManagerReflection.GetField(manager, "disposed"));
+
+            // Dispose the manager, again
+
+            ExceptionAssert.IsNotThrown(
+                () => { manager.Dispose(); }
+                );
         }
 
         /// <summary>
@@ -347,9 +361,16 @@ namespace Novacta.Transactions.IO.Tests.Tools
                                 managedPath);
 
                 ExceptionAssert.IsThrown(
-                    () => { var stream = manager.OnPrepareFileStream(managedPath); },
-                    expectedType: typeof(FileNotFoundException),
-                    expectedMessage:  "Could not find file '" + 
+                    () => {
+                        FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                            manager,
+                            "OnPrepareFileStream",
+                            new string[] { managedPath });
+                    },
+                    expectedType: typeof(TargetInvocationException),
+                    expectedMessage: "Exception has been thrown by the target of an invocation.",
+                    expectedInnerType: typeof(FileNotFoundException),
+                    expectedInnerMessage:  "Could not find file '" + 
                         Path.Combine(Environment.CurrentDirectory, managedPath) +
                         "'.");
             }

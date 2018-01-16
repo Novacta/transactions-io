@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
+using System;
 using System.IO;
 
 namespace Novacta.Transactions.IO
@@ -11,13 +14,11 @@ namespace Novacta.Transactions.IO
     /// <para>
     /// A <see cref="CreateFileManager"/> instance can be created 
     /// with or without the ability of overwriting the managed file. 
-    /// The decision is based on the value of the 
-    /// <c>bool</c> parameter in the constructor. 
-    /// Such value is returned by  
-    /// property <see cref="CanOverwrite"/>. 
-    /// When an instance is notified
-    /// that a transaction is being prepared
-    /// for commitment, it checks if a file having the specified 
+    /// The decision is based on the value of the <c>bool</c> parameter 
+    /// in the constructor. Such value is returned by property 
+    /// <see cref="CanOverwrite"/>. When an instance is notified
+    /// that a transaction is being prepared for commitment, 
+    /// it checks if a file having the specified 
     /// path already exists. In such case, 
     /// if <see cref="CanOverwrite"/> returns <c>false</c>,
     /// the operation cannot be executed and the transaction is 
@@ -32,6 +33,16 @@ namespace Novacta.Transactions.IO
     /// such behavior. 
     /// </para>
     /// </remarks>
+    /// <example>
+    /// <para>
+    /// In the following example, a file manager creates a document in 
+    /// XML format in case of a successfully committed transaction.
+    /// </para>
+    /// <para>
+    /// <code source="..\..\docs\Novacta.Transactions.IO.CodeExamples\CreateFileManagerExample0.cs.txt" 
+    /// language="cs" />
+    /// </para>
+    /// </example>
     /// <seealso cref="Novacta.Transactions.IO.FileManager" />
     public class CreateFileManager : FileManager
     {
@@ -54,14 +65,12 @@ namespace Novacta.Transactions.IO
         private bool fileAlreadyExists;
 
         /// <summary>
-        /// Gets a value indicating whether the managed file 
-        /// already exists at the time at the time of 
-        /// transaction preparation.
+        /// Gets a value indicating whether the managed file already exists 
+        /// at the time of transaction preparation.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the managed already exists 
-        /// at the time of transaction preparation; 
-        /// otherwise, <c>false</c>.
+        /// <c>true</c> if the managed already exists at the time of 
+        /// transaction preparation; otherwise, <c>false</c>.
         /// </value>
         public bool FileAlreadyExists
         {
@@ -97,7 +106,7 @@ namespace Novacta.Transactions.IO
         }
 
         /// <inheritdoc/>
-        public override FileStream OnPrepareFileStream(string managedPath)
+        protected override FileStream OnPrepareFileStream(string managedPath)
         {
             this.fileAlreadyExists = File.Exists(managedPath);
             if (this.fileAlreadyExists && this.canOverwrite)
@@ -111,9 +120,14 @@ namespace Novacta.Transactions.IO
                 this.initialContent = File.ReadAllBytes(managedPath);
             }
 
-            FileMode mode = this.canOverwrite ? FileMode.Create : FileMode.CreateNew;
+            FileMode fileMode = 
+                this.canOverwrite ? FileMode.Create : FileMode.CreateNew;
 
-            return new FileStream(managedPath, mode, FileAccess.ReadWrite, FileShare.Delete);
+            return new FileStream(
+                managedPath, 
+                fileMode, 
+                FileAccess.ReadWrite, 
+                FileShare.Delete);
         }
 
         /// <inheritdoc/>
@@ -126,37 +140,34 @@ namespace Novacta.Transactions.IO
         /// <para>
         /// If the manager can overwrite the file, i.e. 
         /// <see cref="CanOverwrite"/> evaluates to <c>true</c>, and 
-        /// the file already exists when the manager 
-        /// prepares for the transaction 
-        /// (<see cref="FileAlreadyExists"/> returns <c>true</c>),  
-        /// then the file is truncated 
-        /// when the stream for it is instantiated. In such case, 
-        /// this method will restore the initial content of the managed 
-        /// file. 
+        /// the file already exists when the manager prepared for the 
+        /// transaction (<see cref="FileAlreadyExists"/> returns 
+        /// <c>true</c>), then the file is truncated when the stream is 
+        /// successfully instantiated. In such case, this method will 
+        /// restore the initial content of the managed file. 
         /// </para>
         /// <para>
-        /// If the manager cannot overwrite the file and the file did not 
-        /// exist when the manager 
-        /// prepares for the transaction,  
-        /// then the file is newly created 
-        /// when the stream for it is instantiated. In such case, 
-        /// this method will mark the managed 
-        /// file for deletion. 
+        /// If the file did not exist when the manager prepared for the 
+        /// transaction, then the file is newly created when the stream 
+        /// is successfully instantiated. In such case, this method will 
+        /// mark the managed file for deletion. 
         /// </para>
         /// </remarks>
-        public override void OnRollback()
+        protected override void OnRollback()
         {
-            if (this.Stream != null)
+            if (this.ManagedFileStream != null)
             {
 #if DEBUG
             Console.WriteLine(
-                "{0}.OnRollback(...) - Stream: {1}", this.GetType(), this.Stream);
+                "{0}.OnRollback(...) - Stream: {1}", 
+                this.GetType(), 
+                this.ManagedFileStream.Name);
 #endif
                 if (this.fileAlreadyExists)
                 {
                     if (this.canOverwrite)
                     {
-                        using (BinaryWriter writer = new BinaryWriter(this.Stream))
+                        using (BinaryWriter writer = new BinaryWriter(this.ManagedFileStream))
                         {
                             writer.Write(
                                 this.initialContent,
@@ -167,16 +178,14 @@ namespace Novacta.Transactions.IO
                 }
                 else
                 {
-                    File.Delete(this.Stream.Name);
-                    this.Stream.Dispose();
+                    File.Delete(this.ManagedFileStream.Name);
                 }
             }
         }
 
         /// <inheritdoc/>
-        public override void OnCommit()
+        protected override void OnCommit()
         {
-            this.Stream.Dispose();
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Novacta.Transactions.IO.Tests.Tools;
 
 namespace Novacta.Transactions.IO.Tests
@@ -42,13 +45,6 @@ namespace Novacta.Transactions.IO.Tests
             EditFileManagerTester.FileAlreadyExists.OnRollbackNoScope();
             EditFileManagerTester.FileIsNew.OnRollback();
             EditFileManagerTester.FileIsNew.OnRollbackNoScope();
-        }
-
-        [TestMethod()]
-        [DeploymentItem(@"Data\edit-file-already-exists-in-doubt.txt", @"Data")]
-        public void InDoubtTest()
-        {
-            EditFileManagerTester.InDoubt();
         }
 
         [TestMethod()]

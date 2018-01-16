@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
+using System.IO;
 
 namespace Novacta.Transactions.IO
 {
@@ -22,6 +25,17 @@ namespace Novacta.Transactions.IO
     /// managed file should be edited.
     /// </para>
     /// </remarks>
+    /// <example>
+    /// <para>
+    /// In the following example, a file manager edits a 
+    /// document in XML format in case 
+    /// of a successfully committed transaction.
+    /// </para>
+    /// <para>
+    /// <code source="..\..\docs\Novacta.Transactions.IO.CodeExamples\EditFileManagerExample0.cs.txt" 
+    /// language="cs" />
+    /// </para>
+    /// </example>
     /// <seealso cref="Novacta.Transactions.IO.FileManager" />
     public abstract class EditFileManager : FileManager
     {
@@ -35,13 +49,13 @@ namespace Novacta.Transactions.IO
         }
 
         /// <inheritdoc/>
-        public override FileStream OnPrepareFileStream(string managedPath)
+        protected override FileStream OnPrepareFileStream(string managedPath)
         {
             return new FileStream(managedPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
         }
 
         /// <inheritdoc/>
-        public override void OnRollback()
+        protected override void OnRollback()
         {
         }
     }

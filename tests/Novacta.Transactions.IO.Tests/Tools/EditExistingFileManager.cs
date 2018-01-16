@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Novacta.Transactions.IO.Tests.Tools
 {
-    public class EditContentFileManager : EditFileManager
+    public class EditExistingFileManager : EditFileManager
     {
 
         private string newContent = "edited-existing-file";
 
-        public EditContentFileManager(string managedPath) : base(managedPath)
+        public EditExistingFileManager(string managedPath) : base(managedPath)
         {
         }
 
@@ -21,9 +20,9 @@ namespace Novacta.Transactions.IO.Tests.Tools
             get { return this.newContent; }
         }
 
-        public override void OnCommit()
+        protected override void OnCommit()
         {
-            using (BinaryWriter writer = new BinaryWriter(this.Stream, Encoding.UTF8))
+            using (BinaryWriter writer = new BinaryWriter(this.ManagedFileStream, Encoding.UTF8))
             {
                 // Each character in a System.String is defined by a Unicode scalar value, 
                 // encoded by using UTF-16 encoding.

@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Novacta.Transactions.IO.Tests.Tools;
 
 namespace Novacta.Transactions.IO.Tests
@@ -49,12 +52,6 @@ namespace Novacta.Transactions.IO.Tests
             CreateFileManagerTester.FileIsNew.OnRollback(overwrite: false);
             CreateFileManagerTester.FileIsNew.OnRollbackNoScope(overwrite: true);
             CreateFileManagerTester.FileIsNew.OnRollbackNoScope(overwrite: false);
-        }
-
-        [TestMethod()]
-        public void InDoubtTest()
-        {
-            CreateFileManagerTester.InDoubt();
         }
 
         [TestMethod()]

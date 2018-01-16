@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Novacta.Transactions.IO.Tests.Tools;
 
 namespace Novacta.Transactions.IO.Tests
@@ -42,13 +45,6 @@ namespace Novacta.Transactions.IO.Tests
             DeleteFileManagerTester.FileAlreadyExists.OnRollbackNoScope();
             DeleteFileManagerTester.FileIsNew.OnRollback();
             DeleteFileManagerTester.FileIsNew.OnRollbackNoScope();
-        }
-
-        [TestMethod()]
-        [DeploymentItem(@"Data\delete-file-already-exists-in-doubt.txt", @"Data")]
-        public void InDoubtTest()
-        {
-            DeleteFileManagerTester.InDoubt();
         }
 
         [TestMethod()]

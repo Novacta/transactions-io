@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
+using System.IO;
 
 namespace Novacta.Transactions.IO
 {
@@ -34,24 +37,22 @@ namespace Novacta.Transactions.IO
         /// <inheritdoc/>
         /// <remarks>
         /// <para>
-        /// This method marks the managed file for deletion and 
-        /// dispose its <see cref="FileManager.Stream"/>.
+        /// This method marks the managed file for deletion.
         /// </para>
         /// </remarks>
-        public override void OnCommit()
+        protected override void OnCommit()
         {
-            File.Delete(this.Stream.Name);
-            this.Stream.Dispose();
+            File.Delete(this.ManagedFileStream.Name);
         }
 
         /// <inheritdoc/>
-        public override FileStream OnPrepareFileStream(string managedPath)
+        protected override FileStream OnPrepareFileStream(string managedPath)
         {
             return new FileStream(managedPath, FileMode.Open, FileAccess.ReadWrite, FileShare.Delete);
         }
 
         /// <inheritdoc/>
-        public override void OnRollback()
+        protected override void OnRollback()
         {
         }
     }

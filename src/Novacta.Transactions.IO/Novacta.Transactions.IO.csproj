@@ -4,11 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Authors>novacta</Authors>
+    <Authors>Giovanni Lafratta</Authors>
     <Company>Novacta</Company>
-    <Description>This package provides support for manipulating files in transactions.</Description>
-    <Copyright>Copyright © 2017, Novacta, All Rights Reserved.</Copyright>
-    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <Description>This package provides support for manipulating files in transactions.
+It targets all platforms implementing the .NET Standard, version 2.0.</Description>
+    <Copyright>Copyright © 2017, Giovanni Lafratta, All Rights Reserved.</Copyright>
+    <PackageLicenseUrl>https://github.com/Novacta/transactions-io/LICENSE.md</PackageLicenseUrl>
     <PackageReleaseNotes>Initial release of the package.</PackageReleaseNotes>
     <PackageTags>Transactions IO</PackageTags>
     <RepositoryType>git</RepositoryType>

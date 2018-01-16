@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
+using System;
 using System.IO;
 
 namespace Novacta.Transactions.IO
@@ -20,7 +23,8 @@ namespace Novacta.Transactions.IO
     /// path already exists. In such case, 
     /// if <see cref="CreateFileManager.CanOverwrite"/> returns <c>false</c>,
     /// the operation cannot be executed and the transaction is 
-    /// forced to roll back.
+    /// forced to roll back. This also happens if the manager 
+    /// cannot read the content of the source file.
     /// </para>
     /// </remarks>
     /// <seealso cref="Novacta.Transactions.IO.FileManager" />
@@ -62,7 +66,13 @@ namespace Novacta.Transactions.IO
         }
 
         /// <inheritdoc/>
-        public override FileStream OnPrepareFileStream(string managedPath)
+        /// <remarks>
+        /// <para>
+        /// This method is called when the <see cref="FileManager"/> 
+        /// is notified that a transaction is being prepared for commitment. 
+        /// </para>
+        /// </remarks>
+        protected override FileStream OnPrepareFileStream(string managedPath)
         {
             this.sourceContent = File.ReadAllBytes(this.sourcePath);
 
@@ -70,9 +80,9 @@ namespace Novacta.Transactions.IO
         }
 
         /// <inheritdoc/>
-        public override void OnCommit()
+        protected override void OnCommit()
         {
-            using (BinaryWriter writer = new BinaryWriter(this.Stream))
+            using (BinaryWriter writer = new BinaryWriter(this.ManagedFileStream))
             {
                 writer.Write(this.sourceContent);
             }

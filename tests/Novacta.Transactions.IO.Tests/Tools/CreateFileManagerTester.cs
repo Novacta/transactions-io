@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,7 +31,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #endif
                 string managedPath = null;
                 ArgumentExceptionAssert.IsThrown(
-                    () => { var manager = new CreateWithContentFileManager(managedPath, overwrite: true); },
+                    () => { var manager = new CreateNonEmptyFileManager(managedPath, overwrite: true); },
                     expectedType: typeof(ArgumentNullException),
                     expectedPartialMessage: ArgumentExceptionAssert.NullPartialMessage,
                     expectedParameterName: "managedPath");
@@ -51,7 +54,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                 var managedPath = @"Data\create-file-already-exists-on-prepare-cannot-overwrite.txt";
 
                 List<FileManager> managers = new List<FileManager>();
-                managers.Add(new CreateWithContentFileManager(
+                managers.Add(new CreateNonEmptyFileManager(
                      managedPath, overwrite: false));
 
                 Action results = () =>
@@ -98,7 +101,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                     FileShare.None);
 
                 List<FileManager> managers = new List<FileManager>();
-                managers.Add(new CreateWithContentFileManager(
+                managers.Add(new CreateNonEmptyFileManager(
                      managedPath, overwrite: true));
 
                 Action results = () =>
@@ -129,7 +132,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                                               existingStream.Name +
                                               "' because it is being used by another process.");
                 };
-                
+
                 TransactionScopeHelper.Using(
                     managers,
                     results,
@@ -143,7 +146,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #endif
                 var managedPath = @"Data\create-file-already-exists-on-commit.txt";
 
-                var createManager = new CreateWithContentFileManager(
+                var createManager = new CreateNonEmptyFileManager(
                     managedPath, overwrite: true);
 
                 List<FileManager> managers = new List<FileManager>();
@@ -157,7 +160,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                          using (BinaryReader reader = new BinaryReader(stream))
                          {
                              var content = reader.ReadString();
-                             Assert.AreEqual(createManager.WrittenOnCreation, content);
+                             Assert.AreEqual(createManager.ContentWrittenOnCreation, content);
                          }
                      }
                  };
@@ -178,7 +181,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                 Console.WriteLine("FileAlreadyExists_OnRollback");
 #endif
                 var managedPath = @"Data\create-file-already-exists-on-rollback.txt";
-                
+
                 // Add a manager voting to force a rollback.
 
                 ConcreteFileManager forcingRollbackManager =
@@ -195,7 +198,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
                 managers.Add(forcingRollbackManager);
 
-                managers.Add(new CreateWithContentFileManager(
+                managers.Add(new CreateNonEmptyFileManager(
                                 managedPath, overwrite: true));
 
                 Action results = () =>
@@ -237,10 +240,13 @@ namespace Novacta.Transactions.IO.Tests.Tools
                 // Simulate a preparation
 
                 bool overwrite = true;
-                var manager = new CreateWithContentFileManager(
+                var manager = new CreateNonEmptyFileManager(
                                 managedPath, overwrite: overwrite);
 
-                var stream = manager.OnPrepareFileStream(managedPath);
+                FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                    manager,
+                    "OnPrepareFileStream",
+                    new string[] { managedPath });
 
                 FileManagerReflection.SetStream(manager, stream);
                 stream = null;
@@ -250,7 +256,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
                 // Simulate a rollback
 
-                manager.OnRollback();
+                FileManagerReflection.Invoke(
+                    manager,
+                    "OnRollback",
+                    null);
 
                 // Expected results
 
@@ -273,33 +282,20 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #endif
             var managedPath = @"Data\create-file-is-new-no-current-transaction.txt";
 
-            var createManager = new CreateWithContentFileManager(
+            var manager = new CreateNonEmptyFileManager(
                 managedPath, overwrite: true);
 
-            FileStream fileStream = createManager.OnPrepareFileStream(managedPath);
+            FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                manager,
+                "OnPrepareFileStream",
+                new string[] { managedPath });
 
             ExceptionAssert.IsThrown(
-                () => { createManager.EnlistVolatile(EnlistmentOptions.None); },
+                () => { manager.EnlistVolatile(EnlistmentOptions.None); },
                 expectedType: typeof(InvalidOperationException),
                 expectedMessage: String.Format(
                         "Cannot enlist resource {0}: no ambient transaction detected.",
                         managedPath));
-        }
-
-        internal static void InDoubt()
-        {
-#if DEBUG
-            Console.WriteLine("InDoubt");
-#endif
-            var managedPath = @"Data\create-file-is-new-in-doubt.txt";
-
-            var createManager = new CreateWithContentFileManager(
-                managedPath, overwrite: true);
-
-            ExceptionAssert.IsThrown(
-                () => { createManager.InDoubt(null); },
-                expectedType: typeof(NotImplementedException),
-                expectedMessage: "The method or operation is not implemented.");
         }
 
         public static void DefaultOnCommit()
@@ -317,6 +313,12 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
             Action results = () =>
             {
+                // Dispose the manager, so that
+                // the following call to File.Exists
+                // has the required permissions 
+                // to investigate the managed file.
+                createManager.Dispose();
+
                 Assert.IsTrue(File.Exists(managedPath));
                 using (Stream stream = File.OpenRead(managedPath))
                 {
@@ -339,29 +341,47 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
             Console.WriteLine("Dispose");
 #endif
-            var managedPath = @"Data\create-file-is-new-dispose.txt";
+            string managedPath = 
+                overwrite 
+                ?
+                  @"Data\create-file-is-new-dispose.txt"
+                : @"Data\create-file-is-new-dispose-cannot-overwrite.txt";
+
+            // Assure that the managed file is new 
+            // in case of overwrite: false
+            if (!overwrite)
+            {
+                File.Delete(managedPath);
+            }
 
             // Simulate a preparation
 
-            var manager = new CreateWithContentFileManager(
+            var manager = new CreateNonEmptyFileManager(
                             managedPath, overwrite: overwrite);
 
-            Assert.AreEqual(false, FileManagerReflection.GetField(manager, "disposedValue"));
+            Assert.AreEqual(false, FileManagerReflection.GetField(manager, "disposed"));
 
-            var stream = manager.OnPrepareFileStream(managedPath);
+            FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                manager,
+                "OnPrepareFileStream",
+                new string[] { managedPath });
 
             FileManagerReflection.SetStream(manager, stream);
             stream = null;
 
+            // Dispose the manager
+
             manager.Dispose();
-
-            // Simulate rollback results
-
-            File.Delete(managedPath);
 
             // Expected results
 
-            Assert.AreEqual(true, FileManagerReflection.GetField(manager, "disposedValue"));
+            Assert.AreEqual(true, FileManagerReflection.GetField(manager, "disposed"));
+
+            // Dispose the manager, again
+
+            ExceptionAssert.IsNotThrown(
+                () => { manager.Dispose(); }
+                );
         }
 
         /// <summary>
@@ -379,7 +399,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #endif
                 var managedPath = @"Data\create-file-is-new-on-commit.txt";
 
-                var createManager = new CreateWithContentFileManager(
+                var createManager = new CreateNonEmptyFileManager(
                     managedPath, overwrite: overwrite);
 
                 List<FileManager> managers = new List<FileManager>();
@@ -393,7 +413,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                         using (BinaryReader reader = new BinaryReader(stream))
                         {
                             var content = reader.ReadString();
-                            Assert.AreEqual(createManager.WrittenOnCreation, content);
+                            Assert.AreEqual(createManager.ContentWrittenOnCreation, content);
                         }
                     }
                 };
@@ -432,7 +452,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
                 managers.Add(forcingRollbackManager);
 
-                managers.Add(new CreateWithContentFileManager(
+                managers.Add(new CreateNonEmptyFileManager(
                                 managedPath, overwrite: overwrite));
 
                 Action results = () =>
@@ -465,10 +485,13 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
                 // Simulate a preparation
 
-                var manager = new CreateWithContentFileManager(
+                var manager = new CreateNonEmptyFileManager(
                                 managedPath, overwrite: overwrite);
 
-                var stream = manager.OnPrepareFileStream(managedPath);
+                FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                    manager,
+                    "OnPrepareFileStream",
+                    new string[] { managedPath });
 
                 FileManagerReflection.SetStream(manager, stream);
                 stream = null;
@@ -478,9 +501,18 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
                 // Simulate a rollback
 
-                manager.OnRollback();
+                FileManagerReflection.Invoke(
+                    manager,
+                    "OnRollback",
+                    null);
 
                 // Expected results
+
+                // Dispose the manager, so that
+                // the following call to File.Exists
+                // has the required permissions 
+                // to investigate the managed file.
+                manager.Dispose();
 
                 Assert.IsTrue(!File.Exists(managedPath));
             }

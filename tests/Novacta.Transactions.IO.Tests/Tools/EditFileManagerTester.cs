@@ -1,7 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright (c) Giovanni Lafratta. All rights reserved.
+// Licensed under the MIT license. 
+// See the LICENSE file in the project root for more information.
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Transactions;
 
@@ -29,7 +33,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #endif
                 string managedPath = null;
                 ArgumentExceptionAssert.IsThrown(
-                    () => { var manager = new EditContentFileManager(managedPath); },
+                    () => { var manager = new EditExistingFileManager(managedPath); },
                     expectedType: typeof(ArgumentNullException),
                     expectedPartialMessage: ArgumentExceptionAssert.NullPartialMessage,
                     expectedParameterName: "managedPath");
@@ -61,7 +65,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                     FileShare.None);
 
                 List<FileManager> managers = new List<FileManager>();
-                managers.Add(new EditContentFileManager(
+                managers.Add(new EditExistingFileManager(
                      managedPath));
 
                 Action results = () =>
@@ -106,11 +110,11 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #endif
                 var managedPath = @"Data\edit-file-already-exists-on-commit.txt";
 
-                var editManager = new EditContentFileManager(
+                var manager = new EditExistingFileManager(
                     managedPath);
 
                 List<FileManager> managers = new List<FileManager>();
-                managers.Add(editManager);
+                managers.Add(manager);
 
                 Action results = () =>
                 {
@@ -121,10 +125,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
                     // Since such method writes a length-prefixed string to the stream,
                     // the number of written bytes is equal to the String.Length of
                     // NewContent plus 1, the prefixed byte representing such length.
-                    int numberOfExpectedBytes = editManager.NewContent.Length + 1;
+                    int numberOfExpectedBytes = manager.NewContent.Length + 1;
                     var expectedBytes = new byte[numberOfExpectedBytes];
                     expectedBytes[0] = Convert.ToByte(numberOfExpectedBytes - 1);
-                    var stringBytes = Encoding.UTF8.GetBytes(editManager.NewContent);
+                    var stringBytes = Encoding.UTF8.GetBytes(manager.NewContent);
                     stringBytes.CopyTo(expectedBytes, 1);
                     var actualBytes = File.ReadAllBytes(managedPath);
                     int numberOfActualBytes = actualBytes.Length;
@@ -170,7 +174,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
                 managers.Add(forcingRollbackManager);
 
-                managers.Add(new EditContentFileManager(
+                managers.Add(new EditExistingFileManager(
                                 managedPath));
 
                 Action results = () =>
@@ -211,16 +215,22 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
                 // Simulate a preparation
 
-                var manager = new EditContentFileManager(
+                var manager = new EditExistingFileManager(
                                 managedPath);
 
-                var stream = manager.OnPrepareFileStream(managedPath);
+                var stream = (FileStream)FileManagerReflection.Invoke(
+                    manager,
+                    "OnPrepareFileStream",
+                    new string[] { managedPath });
 
                 FileManagerReflection.SetStream(manager, stream);
                 stream = null;
 
-                // Simulate a rollback
+                // Simulate a rollback (NOP)
 
+                // We want to access the managed file to inspect its 
+                // edited contents, hence we need to dispose 
+                // its manager.
                 manager.Dispose();
 
                 // Expected results
@@ -244,33 +254,20 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #endif
             var managedPath = @"Data\edit-file-already-exists-no-current-transaction.txt";
 
-            var editManager = new EditContentFileManager(
+            var manager = new EditExistingFileManager(
                 managedPath);
 
-            FileStream fileStream = editManager.OnPrepareFileStream(managedPath);
+            FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                manager,
+                "OnPrepareFileStream",
+                new string[] { managedPath });
 
             ExceptionAssert.IsThrown(
-                () => { editManager.EnlistVolatile(EnlistmentOptions.None); },
+                () => { manager.EnlistVolatile(EnlistmentOptions.None); },
                 expectedType: typeof(InvalidOperationException),
                 expectedMessage: String.Format(
                         "Cannot enlist resource {0}: no ambient transaction detected.",
                         managedPath));
-        }
-
-        internal static void InDoubt()
-        {
-#if DEBUG
-            Console.WriteLine("InDoubt");
-#endif
-            var managedPath = @"Data\edit-file-already-exists-in-doubt.txt";
-
-            var editManager = new EditContentFileManager(
-                managedPath);
-
-            ExceptionAssert.IsThrown(
-                () => { editManager.InDoubt(null); },
-                expectedType: typeof(NotImplementedException),
-                expectedMessage: "The method or operation is not implemented.");
         }
 
         public static void Dispose()
@@ -282,21 +279,32 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
             // Simulate a preparation
 
-            var manager = new EditContentFileManager(
+            var manager = new EditExistingFileManager(
                             managedPath);
 
-            Assert.AreEqual(false, FileManagerReflection.GetField(manager, "disposedValue"));
+            Assert.AreEqual(false, FileManagerReflection.GetField(manager, "disposed"));
 
-            var stream = manager.OnPrepareFileStream(managedPath);
+            FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                manager,
+                "OnPrepareFileStream",
+                new string[] { managedPath });
 
             FileManagerReflection.SetStream(manager, stream);
             stream = null;
+
+            // Dispose the manager
 
             manager.Dispose();
 
             // Expected results
 
-            Assert.AreEqual(true, FileManagerReflection.GetField(manager, "disposedValue"));
+            Assert.AreEqual(true, FileManagerReflection.GetField(manager, "disposed"));
+
+            // Dispose the manager, again
+
+            ExceptionAssert.IsNotThrown(
+                () => { manager.Dispose(); }
+                );
         }
 
         /// <summary>
@@ -331,7 +339,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
 
                 managers.Add(forcingRollbackManager);
 
-                managers.Add(new EditContentFileManager(
+                managers.Add(new EditExistingFileManager(
                                 managedPath));
 
                 Action results = () =>
@@ -368,9 +376,18 @@ namespace Novacta.Transactions.IO.Tests.Tools
                                 managedPath);
 
                 ExceptionAssert.IsThrown(
-                    () => { var stream = manager.OnPrepareFileStream(managedPath); },
-                    expectedType: typeof(FileNotFoundException),
-                    expectedMessage: "Could not find file '" +
+                    () =>
+                    {
+                        FileStream stream = (FileStream)FileManagerReflection.Invoke(
+                            manager,
+                            "OnPrepareFileStream",
+                            new string[] { managedPath });
+
+                    },
+                    expectedType: typeof(TargetInvocationException),
+                    expectedMessage: "Exception has been thrown by the target of an invocation.",
+                    expectedInnerType: typeof(FileNotFoundException),
+                    expectedInnerMessage: "Could not find file '" +
                         Path.Combine(Environment.CurrentDirectory, managedPath) +
                         "'.");
             }
