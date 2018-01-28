@@ -6,14 +6,14 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Authors>Giovanni Lafratta</Authors>
     <Company>Novacta</Company>
-    <Description>This package provides support for manipulating files in transactions.
-It targets all platforms implementing the .NET Standard, version 2.0.</Description>
+    <Description>This package provides support for manipulating files in transactions.</Description>
     <Copyright>Copyright © 2017, Giovanni Lafratta, All Rights Reserved.</Copyright>
-    <PackageLicenseUrl>https://github.com/Novacta/transactions-io/LICENSE.md</PackageLicenseUrl>
+    <PackageLicenseUrl>http://novacta.github.io/transactions-io/html/3f99838f-33f0-4d69-8557-63a0d4b4f2ce.htm</PackageLicenseUrl>
     <PackageReleaseNotes>Initial release of the package.</PackageReleaseNotes>
-    <PackageTags>Transactions IO</PackageTags>
+    <PackageTags>Transactions IO File TransactionScope IEnlistmentNotification</PackageTags>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/Novacta/transactions-io</RepositoryUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Novacta/transactions-io</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -2,51 +2,52 @@
 <HelpTOC>
 
   <HelpTOCNode Title="Welcome" Url="html/5bc85e8d-5509-432a-b208-89c4c1e8b856.htm" />
+  <HelpTOCNode Title="License agreement" Url="html/3f99838f-33f0-4d69-8557-63a0d4b4f2ce.htm" />
   <HelpTOCNode Title="Getting started" Url="html/61261869-a35e-46c6-8d5b-6fcf1d327060.htm" />
   <HelpTOCNode Title="Creating non-empty files" Url="html/7bf7d37e-e7f7-46f0-894d-c606125cbe5e.htm" />
   <HelpTOCNode Title="Editing files" Url="html/05730aa6-eb50-4f9a-9e56-872fe00c1274.htm" />
-  <HelpTOCNode Id="ab6e0208-4a7d-4ec1-a9cc-a522e93cb272" Title="Version history" Url="html/6e6cb06c-6e2b-4df3-a8a8-ee7a5e450cf8.htm">
+  <HelpTOCNode Id="4b778810-b3b3-4318-a34b-09d5978f124a" Title="Version history" Url="html/6e6cb06c-6e2b-4df3-a8a8-ee7a5e450cf8.htm">
     <HelpTOCNode Title="Version 1.0.0" Url="html/b0769088-9ef6-43b1-a1ff-12711d5ee038.htm" />
   </HelpTOCNode>
-  <HelpTOCNode Id="fca2f067-489c-4064-981d-292dbb2a8078" Title="Novacta.Transactions.IO" Url="html/N_Novacta_Transactions_IO.htm">
-    <HelpTOCNode Id="0fac6ead-ff15-4210-8446-972fb8c176fd" Title="CopyFileManager Class" Url="html/T_Novacta_Transactions_IO_CopyFileManager.htm">
+  <HelpTOCNode Id="e0300d84-8bf3-4cda-a02e-ac3c0aac30c5" Title="Novacta.Transactions.IO" Url="html/N_Novacta_Transactions_IO.htm">
+    <HelpTOCNode Id="37732088-3df6-479a-b6a2-fca9bd861042" Title="CopyFileManager Class" Url="html/T_Novacta_Transactions_IO_CopyFileManager.htm">
       <HelpTOCNode Title="CopyFileManager Constructor " Url="html/M_Novacta_Transactions_IO_CopyFileManager__ctor.htm" />
       <HelpTOCNode Title="CopyFileManager Properties" Url="html/Properties_T_Novacta_Transactions_IO_CopyFileManager.htm" />
       <HelpTOCNode Title="CopyFileManager Methods" Url="html/Methods_T_Novacta_Transactions_IO_CopyFileManager.htm" />
     </HelpTOCNode>
-    <HelpTOCNode Id="ff697b76-864b-465d-91ff-3d0162f5fefa" Title="CreateFileManager Class" Url="html/T_Novacta_Transactions_IO_CreateFileManager.htm">
+    <HelpTOCNode Id="620a8a90-a2be-4fb1-8833-9925789142e2" Title="CreateFileManager Class" Url="html/T_Novacta_Transactions_IO_CreateFileManager.htm">
       <HelpTOCNode Title="CreateFileManager Constructor " Url="html/M_Novacta_Transactions_IO_CreateFileManager__ctor.htm" />
-      <HelpTOCNode Id="39b790fd-2d2a-4619-bab2-2ba3df5328cb" Title="CreateFileManager Properties" Url="html/Properties_T_Novacta_Transactions_IO_CreateFileManager.htm">
+      <HelpTOCNode Id="191dce5c-23d6-41a3-ac53-09e5542fd8a2" Title="CreateFileManager Properties" Url="html/Properties_T_Novacta_Transactions_IO_CreateFileManager.htm">
         <HelpTOCNode Title="CanOverwrite Property " Url="html/P_Novacta_Transactions_IO_CreateFileManager_CanOverwrite.htm" />
         <HelpTOCNode Title="FileAlreadyExists Property " Url="html/P_Novacta_Transactions_IO_CreateFileManager_FileAlreadyExists.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="182217cb-f21a-4cad-8b1d-8fbf75cfb222" Title="CreateFileManager Methods" Url="html/Methods_T_Novacta_Transactions_IO_CreateFileManager.htm">
+      <HelpTOCNode Id="1ab2ab24-0832-4c86-93d4-00d3a6469eed" Title="CreateFileManager Methods" Url="html/Methods_T_Novacta_Transactions_IO_CreateFileManager.htm">
         <HelpTOCNode Title="OnCommit Method " Url="html/M_Novacta_Transactions_IO_CreateFileManager_OnCommit.htm" />
         <HelpTOCNode Title="OnPrepareFileStream Method " Url="html/M_Novacta_Transactions_IO_CreateFileManager_OnPrepareFileStream.htm" />
         <HelpTOCNode Title="OnRollback Method " Url="html/M_Novacta_Transactions_IO_CreateFileManager_OnRollback.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="4e18e78d-480d-4c40-998e-8e0428b65282" Title="DeleteFileManager Class" Url="html/T_Novacta_Transactions_IO_DeleteFileManager.htm">
+    <HelpTOCNode Id="8160e9f1-10b9-4798-a009-4416cb2a9920" Title="DeleteFileManager Class" Url="html/T_Novacta_Transactions_IO_DeleteFileManager.htm">
       <HelpTOCNode Title="DeleteFileManager Constructor " Url="html/M_Novacta_Transactions_IO_DeleteFileManager__ctor.htm" />
       <HelpTOCNode Title="DeleteFileManager Properties" Url="html/Properties_T_Novacta_Transactions_IO_DeleteFileManager.htm" />
       <HelpTOCNode Title="DeleteFileManager Methods" Url="html/Methods_T_Novacta_Transactions_IO_DeleteFileManager.htm" />
     </HelpTOCNode>
-    <HelpTOCNode Id="bfa4f3fe-1ab1-4530-a08b-2eb4017266e6" Title="EditFileManager Class" Url="html/T_Novacta_Transactions_IO_EditFileManager.htm">
+    <HelpTOCNode Id="26a30222-7015-486b-8f33-a9e3b7c977da" Title="EditFileManager Class" Url="html/T_Novacta_Transactions_IO_EditFileManager.htm">
       <HelpTOCNode Title="EditFileManager Constructor " Url="html/M_Novacta_Transactions_IO_EditFileManager__ctor.htm" />
       <HelpTOCNode Title="EditFileManager Properties" Url="html/Properties_T_Novacta_Transactions_IO_EditFileManager.htm" />
-      <HelpTOCNode Id="eb1de333-3a55-4357-afd5-fbdc2d73013a" Title="EditFileManager Methods" Url="html/Methods_T_Novacta_Transactions_IO_EditFileManager.htm">
+      <HelpTOCNode Id="4525f2a2-099c-4448-b4ca-d9d10ffb41b8" Title="EditFileManager Methods" Url="html/Methods_T_Novacta_Transactions_IO_EditFileManager.htm">
         <HelpTOCNode Title="OnPrepareFileStream Method " Url="html/M_Novacta_Transactions_IO_EditFileManager_OnPrepareFileStream.htm" />
         <HelpTOCNode Title="OnRollback Method " Url="html/M_Novacta_Transactions_IO_EditFileManager_OnRollback.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="d5bfd405-473c-4181-b178-4ba99c1f80cf" Title="FileManager Class" Url="html/T_Novacta_Transactions_IO_FileManager.htm">
+    <HelpTOCNode Id="893f9b27-5eef-4d92-9f51-608a3a1916c8" Title="FileManager Class" Url="html/T_Novacta_Transactions_IO_FileManager.htm">
       <HelpTOCNode Title="FileManager Constructor " Url="html/M_Novacta_Transactions_IO_FileManager__ctor.htm" />
-      <HelpTOCNode Id="a2655db1-4787-4192-a35a-23e5aa3458d5" Title="FileManager Properties" Url="html/Properties_T_Novacta_Transactions_IO_FileManager.htm">
+      <HelpTOCNode Id="4408de9a-235a-4ee4-a8ff-87f40c268d2f" Title="FileManager Properties" Url="html/Properties_T_Novacta_Transactions_IO_FileManager.htm">
         <HelpTOCNode Title="ManagedFileStream Property " Url="html/P_Novacta_Transactions_IO_FileManager_ManagedFileStream.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="dab8ed84-124a-4a09-8c9c-a60572e04c8b" Title="FileManager Methods" Url="html/Methods_T_Novacta_Transactions_IO_FileManager.htm">
+      <HelpTOCNode Id="702dde6c-a2c1-4c15-aa0a-e70958f11bde" Title="FileManager Methods" Url="html/Methods_T_Novacta_Transactions_IO_FileManager.htm">
         <HelpTOCNode Title="Commit Method " Url="html/M_Novacta_Transactions_IO_FileManager_Commit.htm" />
-        <HelpTOCNode Id="cd73a2fa-2312-4e46-8714-0fab7d04541b" Title="Dispose Method " Url="html/Overload_Novacta_Transactions_IO_FileManager_Dispose.htm">
+        <HelpTOCNode Id="2a3b89cd-b709-4bd1-a56e-dbc808e6e985" Title="Dispose Method " Url="html/Overload_Novacta_Transactions_IO_FileManager_Dispose.htm">
           <HelpTOCNode Title="Dispose Method " Url="html/M_Novacta_Transactions_IO_FileManager_Dispose.htm" />
           <HelpTOCNode Title="Dispose Method (Boolean)" Url="html/M_Novacta_Transactions_IO_FileManager_Dispose_1.htm" />
         </HelpTOCNode>

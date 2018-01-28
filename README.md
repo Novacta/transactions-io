@@ -20,4 +20,4 @@ For available versions, see the [tags on this repository](https://github.com/nov
 
 ## License
 
-**Novacta.Transactions.IO** is licensed under the [MIT License](http://novacta.github.io/transactions-io/LICENSE.md). 
+**Novacta.Transactions.IO** is licensed under the [MIT License](http://novacta.github.io/transactions-io/html/3f99838f-33f0-4d69-8557-63a0d4b4f2ce.htm). 
