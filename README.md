@@ -12,7 +12,7 @@ Full documentation is located [here](http://novacta.github.io/transactions-io/).
 
 ## Installation
 
-Installation is performed via [NuGet](https://www.nuget.org/packages?q=Novacta.Transactions.IO).
+Installation is performed via [NuGet](https://www.nuget.org/packages/Novacta.Transactions.IO).
 
 ## Versioning
 We use [SemVer](http://semver.org/) for versioning. 
