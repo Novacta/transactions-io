@@ -7,6 +7,7 @@ using Novacta.Transactions.IO.Tests.Tools;
 namespace Novacta.Transactions.IO.Tests
 {
     [TestClass()]
+    [DeploymentItem("Data", "Data")]
     public class EditFileManagerTests
     {
         [TestMethod()]
@@ -16,29 +17,24 @@ namespace Novacta.Transactions.IO.Tests
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\edit-file-already-exists-dispose.txt", @"Data")]
         public void DisposeTest()
         {
             EditFileManagerTester.Dispose();
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\edit-file-already-exists-on-prepare-file-is-not-lockable.txt", @"Data")]
         public void OnPrepareTest()
         {
             EditFileManagerTester.FileAlreadyExists.OnPrepareFileIsNotLockable();
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\edit-file-already-exists-on-commit.txt", @"Data")]
         public void OnCommitTest()
         {
             EditFileManagerTester.FileAlreadyExists.OnCommit();
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\edit-file-already-exists-on-rollback.txt", @"Data")]
-        [DeploymentItem(@"Data\edit-file-already-exists-on-rollback-no-scope.txt", @"Data")]
         public void OnRollbackTest()
         {
             EditFileManagerTester.FileAlreadyExists.OnRollback();
@@ -48,7 +44,6 @@ namespace Novacta.Transactions.IO.Tests
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\edit-file-already-exists-no-current-transaction.txt", @"Data")]
         public void EnlistVolatileTest()
         {
             EditFileManagerTester.CurrentTransactionIsNull();

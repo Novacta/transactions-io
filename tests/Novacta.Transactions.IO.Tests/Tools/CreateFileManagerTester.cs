@@ -51,13 +51,18 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileAlreadyExists_CannotOverwrite");
 #endif
-                var managedPath = @"Data\create-file-already-exists-on-prepare-cannot-overwrite.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "create-file-already-exists-on-prepare-cannot-overwrite.txt";
 
-                List<FileManager> managers = new List<FileManager>();
-                managers.Add(new CreateNonEmptyFileManager(
-                     managedPath, overwrite: false));
+                List<FileManager> managers = new List<FileManager>
+                {
+                    new CreateNonEmptyFileManager(
+                        managedPath, overwrite: false)
+                };
 
-                Action results = () =>
+                void results()
                 {
                     Assert.IsTrue(File.Exists(managedPath));
                     using (Stream stream = File.OpenRead(managedPath))
@@ -68,15 +73,15 @@ namespace Novacta.Transactions.IO.Tests.Tools
                             Assert.AreEqual("existing-file", content);
                         }
                     }
-                };
+                }
 
-                Action<Exception> rolledBack = (e) =>
+                void rolledBack(Exception e)
                 {
                     ExceptionAssert.IsThrown(
                         () => { throw e; },
                         typeof(TransactionAbortedException),
                         "The transaction has aborted.");
-                };
+                }
 
                 TransactionScopeHelper.Using(
                     managers,
@@ -89,7 +94,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileAlreadyExists_FileIsNotLockable");
 #endif
-                var managedPath = @"Data\create-file-already-exists-on-prepare-file-is-not-lockable.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "create-file-already-exists-on-prepare-file-is-not-lockable.txt";
 
                 // Create a stream so that the manager cannot 
                 // lock the existing file and hence will force
@@ -100,11 +108,13 @@ namespace Novacta.Transactions.IO.Tests.Tools
                     FileAccess.Read,
                     FileShare.None);
 
-                List<FileManager> managers = new List<FileManager>();
-                managers.Add(new CreateNonEmptyFileManager(
-                     managedPath, overwrite: true));
+                List<FileManager> managers = new List<FileManager>
+                {
+                    new CreateNonEmptyFileManager(
+                        managedPath, overwrite: true)
+                };
 
-                Action results = () =>
+                void results()
                 {
                     Assert.IsTrue(File.Exists(managedPath));
 
@@ -119,9 +129,9 @@ namespace Novacta.Transactions.IO.Tests.Tools
                             Assert.AreEqual("existing-file", content);
                         }
                     }
-                };
+                }
 
-                Action<Exception> rolledBack = (e) =>
+                void rolledBack(Exception e)
                 {
                     ExceptionAssert.IsThrown(
                         () => { throw e; },
@@ -131,7 +141,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                         expectedInnerMessage: "The process cannot access the file '" +
                                               existingStream.Name +
                                               "' because it is being used by another process.");
-                };
+                }
 
                 TransactionScopeHelper.Using(
                     managers,
@@ -144,30 +154,35 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileAlreadyExists_OnCommit");
 #endif
-                var managedPath = @"Data\create-file-already-exists-on-commit.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "create-file-already-exists-on-commit.txt";
 
                 var createManager = new CreateNonEmptyFileManager(
                     managedPath, overwrite: true);
 
-                List<FileManager> managers = new List<FileManager>();
-                managers.Add(createManager);
-
-                Action results = () =>
-                 {
-                     Assert.IsTrue(File.Exists(managedPath));
-                     using (Stream stream = File.OpenRead(managedPath))
-                     {
-                         using (BinaryReader reader = new BinaryReader(stream))
-                         {
-                             var content = reader.ReadString();
-                             Assert.AreEqual(createManager.ContentWrittenOnCreation, content);
-                         }
-                     }
-                 };
-
-                Action<Exception> rolledBack = (e) =>
+                List<FileManager> managers = new List<FileManager>
                 {
+                    createManager
                 };
+
+                void results()
+                {
+                    Assert.IsTrue(File.Exists(managedPath));
+                    using (Stream stream = File.OpenRead(managedPath))
+                    {
+                        using (BinaryReader reader = new BinaryReader(stream))
+                        {
+                            var content = reader.ReadString();
+                            Assert.AreEqual(createManager.ContentWrittenOnCreation, content);
+                        }
+                    }
+                }
+
+                void rolledBack(Exception e)
+                {
+                }
 
                 TransactionScopeHelper.Using(
                     managers,
@@ -180,12 +195,18 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileAlreadyExists_OnRollback");
 #endif
-                var managedPath = @"Data\create-file-already-exists-on-rollback.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "create-file-already-exists-on-rollback.txt";
 
                 // Add a manager voting to force a rollback.
 
                 ConcreteFileManager forcingRollbackManager =
-                    new ConcreteFileManager(@"Data\create-file-already-exists-on-rollback-0.txt");
+                    new ConcreteFileManager(
+                        "Data" +
+                        Path.DirectorySeparatorChar +
+                        "create-file-already-exists-on-rollback-0.txt");
 
                 var onPrepareException = new Exception("Voting for a rollback.");
 
@@ -194,14 +215,15 @@ namespace Novacta.Transactions.IO.Tests.Tools
                     throw onPrepareException;
                 };
 
-                List<FileManager> managers = new List<FileManager>();
+                List<FileManager> managers = new List<FileManager>
+                {
+                    forcingRollbackManager,
 
-                managers.Add(forcingRollbackManager);
+                    new CreateNonEmptyFileManager(
+                        managedPath, overwrite: true)
+                };
 
-                managers.Add(new CreateNonEmptyFileManager(
-                                managedPath, overwrite: true));
-
-                Action results = () =>
+                void results()
                 {
                     Assert.IsTrue(File.Exists(managedPath));
                     using (Stream stream = File.OpenRead(managedPath))
@@ -212,9 +234,9 @@ namespace Novacta.Transactions.IO.Tests.Tools
                             Assert.AreEqual("existing-file", content);
                         }
                     }
-                };
+                }
 
-                Action<Exception> rolledBack = (e) =>
+                void rolledBack(Exception e)
                 {
                     ExceptionAssert.IsThrown(
                         () => { throw e; },
@@ -222,7 +244,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                         expectedMessage: "The transaction has aborted.",
                         expectedInnerType: onPrepareException.GetType(),
                         expectedInnerMessage: onPrepareException.Message);
-                };
+                }
 
                 TransactionScopeHelper.Using(
                     managers,
@@ -235,7 +257,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileAlreadyExists_OnRollbackNoScope");
 #endif
-                var managedPath = @"Data\create-file-already-exists-on-rollback-no-scope.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "create-file-already-exists-on-rollback-no-scope.txt";
 
                 // Simulate a preparation
 
@@ -280,7 +305,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
             Console.WriteLine("CurrentTransactionIsNull");
 #endif
-            var managedPath = @"Data\create-file-is-new-no-current-transaction.txt";
+            var managedPath = 
+                "Data" +
+                Path.DirectorySeparatorChar +
+                "create-file-is-new-no-current-transaction.txt";
 
             var manager = new CreateNonEmptyFileManager(
                 managedPath, overwrite: true);
@@ -303,15 +331,20 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
             Console.WriteLine("DefaultOnCommit");
 #endif
-            var managedPath = @"Data\create-file-is-new-default-on-commit.txt";
+            var managedPath = 
+                "Data" +
+                Path.DirectorySeparatorChar +
+                "create-file-is-new-default-on-commit.txt";
 
             var createManager = new CreateFileManager(
                 managedPath, overwrite: true);
 
-            List<FileManager> managers = new List<FileManager>();
-            managers.Add(createManager);
+            List<FileManager> managers = new List<FileManager>
+            {
+                createManager
+            };
 
-            Action results = () =>
+            void results()
             {
                 // Dispose the manager, so that
                 // the following call to File.Exists
@@ -324,11 +357,11 @@ namespace Novacta.Transactions.IO.Tests.Tools
                 {
                     Assert.AreEqual(0, stream.Length);
                 }
-            };
+            }
 
-            Action<Exception> rolledBack = (e) =>
+            void rolledBack(Exception e)
             {
-            };
+            }
 
             TransactionScopeHelper.Using(
                 managers,
@@ -344,8 +377,13 @@ namespace Novacta.Transactions.IO.Tests.Tools
             string managedPath = 
                 overwrite 
                 ?
-                  @"Data\create-file-is-new-dispose.txt"
-                : @"Data\create-file-is-new-dispose-cannot-overwrite.txt";
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "create-file-is-new-dispose.txt"
+                :   
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "create-file-is-new-dispose-cannot-overwrite.txt";
 
             // Assure that the managed file is new 
             // in case of overwrite: false
@@ -397,15 +435,20 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileIsNew_OnCommit");
 #endif
-                var managedPath = @"Data\create-file-is-new-on-commit.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "create-file-is-new-on-commit.txt";
 
                 var createManager = new CreateNonEmptyFileManager(
                     managedPath, overwrite: overwrite);
 
-                List<FileManager> managers = new List<FileManager>();
-                managers.Add(createManager);
+                List<FileManager> managers = new List<FileManager>
+                {
+                    createManager
+                };
 
-                Action results = () =>
+                void results()
                 {
                     Assert.IsTrue(File.Exists(managedPath));
                     using (Stream stream = File.OpenRead(managedPath))
@@ -416,11 +459,11 @@ namespace Novacta.Transactions.IO.Tests.Tools
                             Assert.AreEqual(createManager.ContentWrittenOnCreation, content);
                         }
                     }
-                };
+                }
 
-                Action<Exception> rolledBack = (e) =>
+                void rolledBack(Exception e)
                 {
-                };
+                }
 
                 TransactionScopeHelper.Using(
                     managers,
@@ -433,13 +476,18 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileIsNew_OnRollback");
 #endif
-                var managedPath = @"Data\create-file-is-new-on-rollback.txt";
-
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "create-file-is-new-on-rollback.txt";
 
                 // Add a manager voting to force a rollback.
 
                 ConcreteFileManager forcingRollbackManager =
-                    new ConcreteFileManager(@"Data\create-file-is-new-on-rollback-0.txt");
+                    new ConcreteFileManager(
+                        "Data" +
+                        Path.DirectorySeparatorChar +
+                        "create-file-is-new-on-rollback-0.txt");
 
                 var onPrepareException = new Exception("Voting for a rollback.");
 
@@ -448,19 +496,20 @@ namespace Novacta.Transactions.IO.Tests.Tools
                     throw onPrepareException;
                 };
 
-                List<FileManager> managers = new List<FileManager>();
-
-                managers.Add(forcingRollbackManager);
-
-                managers.Add(new CreateNonEmptyFileManager(
-                                managedPath, overwrite: overwrite));
-
-                Action results = () =>
+                List<FileManager> managers = new List<FileManager>
                 {
-                    Assert.IsTrue(!File.Exists(managedPath));
+                    forcingRollbackManager,
+
+                    new CreateNonEmptyFileManager(
+                        managedPath, overwrite: overwrite)
                 };
 
-                Action<Exception> rolledBack = (e) =>
+                void results()
+                {
+                    Assert.IsTrue(!File.Exists(managedPath));
+                }
+
+                void rolledBack(Exception e)
                 {
                     ExceptionAssert.IsThrown(
                         () => { throw e; },
@@ -468,7 +517,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                         expectedMessage: "The transaction has aborted.",
                         expectedInnerType: onPrepareException.GetType(),
                         expectedInnerMessage: onPrepareException.Message);
-                };
+                }
 
                 TransactionScopeHelper.Using(
                     managers,
@@ -481,7 +530,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileIsNew_OnRollbackNoScope");
 #endif
-                var managedPath = @"Data\create-file-is-new-on-rollback-no-scope.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "create-file-is-new-on-rollback-no-scope.txt";
 
                 // Simulate a preparation
 

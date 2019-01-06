@@ -16,7 +16,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
         {
         }
 
-        private string writtenOnCreation = "written-on-creation";
+        private readonly string writtenOnCreation = "written-on-creation";
 
         /// <summary>
         /// Gets the content written on creation.

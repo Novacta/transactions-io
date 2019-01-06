@@ -7,6 +7,7 @@ using Novacta.Transactions.IO.Tests.Tools;
 namespace Novacta.Transactions.IO.Tests
 {
     [TestClass()]
+    [DeploymentItem("Data", "Data")]
     public class CreateFileManagerTests
     {
         [TestMethod()]
@@ -23,8 +24,6 @@ namespace Novacta.Transactions.IO.Tests
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\create-file-already-exists-on-prepare-cannot-overwrite.txt", @"Data")]
-        [DeploymentItem(@"Data\create-file-already-exists-on-prepare-file-is-not-lockable.txt", @"Data")]
         public void OnPrepareTest()
         {
             CreateFileManagerTester.FileAlreadyExists.OnPrepareCannotOverwrite();
@@ -32,7 +31,6 @@ namespace Novacta.Transactions.IO.Tests
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\create-file-already-exists-on-commit.txt", @"Data")]
         public void OnCommitTest()
         {
             CreateFileManagerTester.DefaultOnCommit();
@@ -42,8 +40,6 @@ namespace Novacta.Transactions.IO.Tests
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\create-file-already-exists-on-rollback.txt", @"Data")]
-        [DeploymentItem(@"Data\create-file-already-exists-on-rollback-no-scope.txt", @"Data")]
         public void OnRollbackTest()
         {
             CreateFileManagerTester.FileAlreadyExists.OnRollback();

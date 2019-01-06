@@ -7,6 +7,7 @@ using Novacta.Transactions.IO.Tests.Tools;
 namespace Novacta.Transactions.IO.Tests
 {
     [TestClass()]
+    [DeploymentItem("Data", "Data")]
     public class CopyFileManagerTests
     {
         [TestMethod()]
@@ -24,9 +25,6 @@ namespace Novacta.Transactions.IO.Tests
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\copy-file-source.txt", @"Data")]
-        [DeploymentItem(@"Data\copy-file-already-exists-on-prepare-cannot-overwrite.txt", @"Data")]
-        [DeploymentItem(@"Data\copy-file-already-exists-on-prepare-file-is-not-lockable.txt", @"Data")]
         public void OnPrepareTest()
         {
             CopyFileManagerTester.FileAlreadyExists.OnPrepareCannotOverwrite();
@@ -34,8 +32,6 @@ namespace Novacta.Transactions.IO.Tests
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\copy-file-source.txt", @"Data")]
-        [DeploymentItem(@"Data\copy-file-already-exists-on-commit.txt", @"Data")]
         public void OnCommitTest()
         {
             CopyFileManagerTester.FileAlreadyExists.OnCommit();
@@ -44,9 +40,6 @@ namespace Novacta.Transactions.IO.Tests
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\copy-file-source.txt", @"Data")]
-        [DeploymentItem(@"Data\copy-file-already-exists-on-rollback.txt", @"Data")]
-        [DeploymentItem(@"Data\copy-file-already-exists-on-rollback-no-scope.txt", @"Data")]
         public void OnRollbackTest()
         {
             CopyFileManagerTester.FileAlreadyExists.OnRollback();

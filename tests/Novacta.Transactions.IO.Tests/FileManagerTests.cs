@@ -10,12 +10,15 @@ using System.Transactions;
 namespace Novacta.Transactions.IO.Tests
 {
     [TestClass()]
+    [DeploymentItem("Data", "Data")]
     public class FileManagerTests
     {
         [TestMethod()]
         public void StreamGetTest()
         {
-            var managedPath = @"Data\create-file-get-stream-on-disposed.txt";
+            var managedPath = "Data" +
+                Path.DirectorySeparatorChar +
+                "create-file-get-stream-on-disposed.txt";
 
             var manager = new CreateNonEmptyFileManager(
                 managedPath,
@@ -38,21 +41,23 @@ namespace Novacta.Transactions.IO.Tests
             ExceptionAssert.IsThrown(
                 () => { var managerStream = manager.ManagedFileStream; },
                 expectedType: typeof(ObjectDisposedException),
-                expectedMessage: "Cannot access a disposed object.\r\n" +
+                expectedMessage: "Cannot access a disposed object." +
+                Environment.NewLine +
                 "Object name: " +
                 "\'CreateNonEmptyFileManager\'."
                 );
         }
 
         [TestMethod()]
-        [DeploymentItem(@"Data\in-doubt.txt", @"Data")]
         public void OnInDoubtTest()
         {
-            var managedPath = @"Data\in-doubt.txt";
+            var managedPath = @"Data" +
+                Path.DirectorySeparatorChar +
+                "in-doubt.txt";
 
             var manager = new ConcreteFileManager(managedPath);
             string state = "state";
-            Action onInDoubtBody = () => { manager.State = state; };
+            void onInDoubtBody() { manager.State = state; }
             manager.OnInDoubtBody = onInDoubtBody;
 
             using (TransactionScope scope = new TransactionScope())

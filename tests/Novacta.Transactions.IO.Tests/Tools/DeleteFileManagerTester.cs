@@ -52,7 +52,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileAlreadyExists_FileIsNotLockable");
 #endif
-                var managedPath = @"Data\delete-file-already-exists-on-prepare-file-is-not-lockable.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "delete-file-already-exists-on-prepare-file-is-not-lockable.txt";
 
                 // Create a stream so that the manager cannot 
                 // lock the existing file and hence will force
@@ -63,11 +66,13 @@ namespace Novacta.Transactions.IO.Tests.Tools
                     FileAccess.Read,
                     FileShare.None);
 
-                List<FileManager> managers = new List<FileManager>();
-                managers.Add(new DeleteFileManager(
-                     managedPath));
+                List<FileManager> managers = new List<FileManager>
+                {
+                    new DeleteFileManager(
+                        managedPath)
+                };
 
-                Action results = () =>
+                void results()
                 {
                     Assert.IsTrue(File.Exists(managedPath));
 
@@ -82,9 +87,9 @@ namespace Novacta.Transactions.IO.Tests.Tools
                             Assert.AreEqual("existing-file", content);
                         }
                     }
-                };
+                }
 
-                Action<Exception> rolledBack = (e) =>
+                void rolledBack(Exception e)
                 {
                     ExceptionAssert.IsThrown(
                         () => { throw e; },
@@ -94,7 +99,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                         expectedInnerMessage: "The process cannot access the file '" +
                                               existingStream.Name +
                                               "' because it is being used by another process.");
-                };
+                }
 
                 TransactionScopeHelper.Using(
                     managers,
@@ -107,15 +112,20 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileAlreadyExists_OnCommit");
 #endif
-                var managedPath = @"Data\delete-file-already-exists-on-commit.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "delete-file-already-exists-on-commit.txt";
 
                 var deleteManager = new DeleteFileManager(
                     managedPath);
 
-                List<FileManager> managers = new List<FileManager>();
-                managers.Add(deleteManager);
+                List<FileManager> managers = new List<FileManager>
+                {
+                    deleteManager
+                };
 
-                Action results = () =>
+                void results()
                 {
                     // Dispose the manager, so that
                     // the following call to File.Exists
@@ -124,11 +134,11 @@ namespace Novacta.Transactions.IO.Tests.Tools
                     deleteManager.Dispose();
 
                     Assert.IsTrue(!File.Exists(managedPath));
-                };
+                }
 
-                Action<Exception> rolledBack = (e) =>
+                void rolledBack(Exception e)
                 {
-                };
+                }
 
                 TransactionScopeHelper.Using(
                     managers,
@@ -141,12 +151,18 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileAlreadyExists_OnRollback");
 #endif
-                var managedPath = @"Data\delete-file-already-exists-on-rollback.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "delete-file-already-exists-on-rollback.txt";
 
                 // Add a manager voting to force a rollback.
 
                 ConcreteFileManager forcingRollbackManager =
-                    new ConcreteFileManager(@"Data\delete-file-already-exists-on-rollback-0.txt");
+                    new ConcreteFileManager(
+                        "Data" +
+                        Path.DirectorySeparatorChar +
+                        "delete-file-already-exists-on-rollback-0.txt");
 
                 var onPrepareException = new Exception("Voting for a rollback.");
 
@@ -155,14 +171,15 @@ namespace Novacta.Transactions.IO.Tests.Tools
                     throw onPrepareException;
                 };
 
-                List<FileManager> managers = new List<FileManager>();
+                List<FileManager> managers = new List<FileManager>
+                {
+                    forcingRollbackManager,
 
-                managers.Add(forcingRollbackManager);
+                    new DeleteFileManager(
+                        managedPath)
+                };
 
-                managers.Add(new DeleteFileManager(
-                                managedPath));
-
-                Action results = () =>
+                void results()
                 {
                     Assert.IsTrue(File.Exists(managedPath));
                     using (Stream stream = File.OpenRead(managedPath))
@@ -173,9 +190,9 @@ namespace Novacta.Transactions.IO.Tests.Tools
                             Assert.AreEqual("existing-file", content);
                         }
                     }
-                };
+                }
 
-                Action<Exception> rolledBack = (e) =>
+                void rolledBack(Exception e)
                 {
                     ExceptionAssert.IsThrown(
                         () => { throw e; },
@@ -183,7 +200,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                         expectedMessage: "The transaction has aborted.",
                         expectedInnerType: onPrepareException.GetType(),
                         expectedInnerMessage: onPrepareException.Message);
-                };
+                }
 
                 TransactionScopeHelper.Using(
                     managers,
@@ -196,7 +213,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileAlreadyExists_OnRollbackNoScope");
 #endif
-                var managedPath = @"Data\delete-file-already-exists-on-rollback-no-scope.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "delete-file-already-exists-on-rollback-no-scope.txt";
 
                 // Simulate a preparation
 
@@ -237,7 +257,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
             Console.WriteLine("CurrentTransactionIsNull");
 #endif
-            var managedPath = @"Data\delete-file-already-exists-no-current-transaction.txt";
+            var managedPath = 
+                "Data" +
+                Path.DirectorySeparatorChar +
+                "delete-file-already-exists-no-current-transaction.txt";
 
             var manager = new DeleteFileManager(
                 managedPath);
@@ -260,7 +283,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
             Console.WriteLine("Dispose");
 #endif
-            var managedPath = @"Data\delete-file-already-exists-dispose.txt";
+            var managedPath = 
+                "Data" +
+                Path.DirectorySeparatorChar +
+                "delete-file-already-exists-dispose.txt";
 
             // Simulate a preparation
 
@@ -305,13 +331,18 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileIsNew_OnRollback");
 #endif
-                var managedPath = @"Data\delete-file-is-new-on-rollback.txt";
-
+                var managedPath =
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "delete-file-is-new-on-rollback.txt";
 
                 // Add a manager voting to force a rollback.
 
                 ConcreteFileManager forcingRollbackManager =
-                    new ConcreteFileManager(@"Data\delete-file-is-new-on-rollback-0.txt");
+                    new ConcreteFileManager(
+                        "Data" +
+                        Path.DirectorySeparatorChar +
+                        "delete-file-is-new-on-rollback-0.txt");
 
                 var onPrepareException = new Exception("Voting for a rollback.");
 
@@ -320,19 +351,20 @@ namespace Novacta.Transactions.IO.Tests.Tools
                     throw onPrepareException;
                 };
 
-                List<FileManager> managers = new List<FileManager>();
-
-                managers.Add(forcingRollbackManager);
-
-                managers.Add(new DeleteFileManager(
-                                managedPath));
-
-                Action results = () =>
+                List<FileManager> managers = new List<FileManager>
                 {
-                    Assert.IsTrue(!File.Exists(managedPath));
+                    forcingRollbackManager,
+
+                    new DeleteFileManager(
+                        managedPath)
                 };
 
-                Action<Exception> rolledBack = (e) =>
+                void results()
+                {
+                    Assert.IsTrue(!File.Exists(managedPath));
+                }
+
+                void rolledBack(Exception e)
                 {
                     ExceptionAssert.IsThrown(
                         () => { throw e; },
@@ -340,7 +372,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
                         expectedMessage: "The transaction has aborted.",
                         expectedInnerType: onPrepareException.GetType(),
                         expectedInnerMessage: onPrepareException.Message);
-                };
+                }
 
                 TransactionScopeHelper.Using(
                     managers,
@@ -353,7 +385,10 @@ namespace Novacta.Transactions.IO.Tests.Tools
 #if DEBUG
                 Console.WriteLine("FileIsNew_OnRollbackNoScope");
 #endif
-                var managedPath = @"Data\delete-file-is-new-on-rollback-no-scope.txt";
+                var managedPath = 
+                    "Data" +
+                    Path.DirectorySeparatorChar +
+                    "delete-file-is-new-on-rollback-no-scope.txt";
 
                 // Simulate a preparation
 

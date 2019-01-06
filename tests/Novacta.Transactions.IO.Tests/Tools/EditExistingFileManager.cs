@@ -9,7 +9,7 @@ namespace Novacta.Transactions.IO.Tests.Tools
     public class EditExistingFileManager : EditFileManager
     {
 
-        private string newContent = "edited-existing-file";
+        private readonly string newContent = "edited-existing-file";
 
         public EditExistingFileManager(string managedPath) : base(managedPath)
         {
